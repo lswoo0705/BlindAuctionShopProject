@@ -3,18 +3,35 @@ package com.blindauction.blindauctionshopproject.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-@Entity(name="ADMIN")
+@Entity(name = "ADMINS")
 public class Admin {
-        @Id
-        private long id;
-        private String username;
-        private String nickname;
-        private String password;
-        private UserRoleEnum role;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
-    }
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false, unique = true)
+    private String nickname;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private AdminRoleEnum role;
+
+        //생성자
+        public Admin (String username, String nickname, String password, AdminRoleEnum role){
+                this.username = username;
+                this.nickname = nickname;
+                this.password = password;
+                this.role = role;
+        }
+
+}
