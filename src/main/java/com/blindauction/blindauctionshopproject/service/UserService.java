@@ -8,7 +8,6 @@ import com.blindauction.blindauctionshopproject.repository.SellerPermissionRepos
 import com.blindauction.blindauctionshopproject.dto.user.UserSignupRequest;
 import com.blindauction.blindauctionshopproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +22,19 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 나의 프로필 조회
-    public UserProfileResponse getUserProfile() {
-
+    public UserProfileResponse getUserProfile(String userInfo) {
+        User user = userRepository.findByUsername(userInfo).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")
+        );
+        String userProfileName = user.getUsername();
+        String userProfileNick = user.getNickname();
+        return new UserProfileResponse(userProfileName, userProfileNick);
     }
 
     // 판매자 등록 요청
-    public ResponseEntity registerSellerPermission(String phoneNum, String permissionDetail) {
+    public void registerSellerPermission(String phoneNum, String permissionDetail) {
         SellerPermission sellerPermission = new SellerPermission(phoneNum, permissionDetail);
         sellerPermissionRepository.save(sellerPermission);
-        return
     }
 
     //유저 회원가입
