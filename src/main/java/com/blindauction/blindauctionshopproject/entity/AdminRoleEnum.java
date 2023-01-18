@@ -1,7 +1,5 @@
 package com.blindauction.blindauctionshopproject.entity;
 
-public enum UserRoleEnum {
-    USER,
-    SELLER
-
+public enum AdminRoleEnum {
+    ADMIN
 }
