@@ -27,6 +27,7 @@ public class UserService {
         sellerPermissionRepository.save(sellerPermission);
         return
     }
+*/
 
     //유저 회원가입
 

@@ -1,11 +1,11 @@
 package com.blindauction.blindauctionshopproject.controller;
 
 import com.blindauction.blindauctionshopproject.dto.StatusResponse;
-		import com.blindauction.blindauctionshopproject.dto.user.SellerPermissionRegisterRequest;
-import com.blindauction.blindauctionshopproject.dto.user.UserProfileResponse;
+import com.blindauction.blindauctionshopproject.dto.user.*;
 import com.blindauction.blindauctionshopproject.dto.user.SellerPermissionRegisterRequest;
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileResponse;
 import com.blindauction.blindauctionshopproject.service.UserService;
+import com.blindauction.blindauctionshopproject.util.jwtUtil.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 
 @RestController
