@@ -41,8 +41,7 @@ public class User {
         this.role = role;
     }
 
-    public User(long id, String username, String nickname, String password, String phoneNum, UserRoleEnum role) {
-        this.id = id;
+    public User(String username, String nickname, String password, String phoneNum, UserRoleEnum role) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;

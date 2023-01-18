@@ -122,7 +122,7 @@ public class AdminService {
         );
 
        userRepository.save(
-               new User(userId,
+               new User(
                        user.getUsername(),
                        user.getNickname(),
                        user.getPassword(),
@@ -130,4 +130,18 @@ public class AdminService {
                        SELLER));
     }
 
+    @Transactional
+    public void deleteSellerRole(Long userId) {
+
+        User seller = userRepository.findByIdAndRole(userId, SELLER).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 고객이거나 권한이 판매자가 아닙니다.")
+        );
+
+        userRepository.save(
+                new User(
+                        seller.getUsername(),
+                        seller.getNickname(),
+                        seller.getPassword(),
+                        USER));
+    }
 }
