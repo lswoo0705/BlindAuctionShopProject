@@ -4,14 +4,13 @@ package com.blindauction.blindauctionshopproject.service;
 import com.blindauction.blindauctionshopproject.dto.admin.AdminSignupRequest;
 
 import com.blindauction.blindauctionshopproject.dto.admin.SellerDetailResponse;
+import com.blindauction.blindauctionshopproject.dto.admin.SellerPermissonResponse;
 import com.blindauction.blindauctionshopproject.dto.admin.UserResponse;
-import com.blindauction.blindauctionshopproject.entity.Admin;
-import com.blindauction.blindauctionshopproject.entity.AdminRoleEnum;
+import com.blindauction.blindauctionshopproject.entity.*;
 
-import com.blindauction.blindauctionshopproject.entity.User;
-import com.blindauction.blindauctionshopproject.entity.UserRoleEnum;
 import com.blindauction.blindauctionshopproject.repository.AdminRepository;
 
+import com.blindauction.blindauctionshopproject.repository.SellerPermissionRepository;
 import com.blindauction.blindauctionshopproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +29,8 @@ import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.USER;
 public class AdminService {
     private UserRepository userRepository;
     private final AdminRepository adminRepository;
+
+    private SellerPermissionRepository sellerPermissionRepository;
     private final PasswordEncoder passwordEncoder;
     private static final String ADMIN_TOKEN = "eyJzdWIiOiJoZWxsb3dvcmxkIiwibm";
 
@@ -55,13 +56,11 @@ public class AdminService {
 
     public List<UserResponse> getUserList(User user) {
 
-        UserRoleEnum role = USER;
-
-        List<User> userList = userRepository.findAllByRole(role);
+        List<User> userList = userRepository.findAllByRole(USER);
         List<UserResponse> userResponseList = new ArrayList<>();
 
         for(long i = 0L; i < userList.size(); i++) { // 페이징 : 가입한 순서대로 표기되는지 확인해봐야 합니다
-            user = userRepository.findById(i).orElseThrow(
+            userRepository.findById(i).orElseThrow(
                     () -> new IllegalArgumentException("존재하지 않는 고객입니다.")
             );
 
@@ -72,7 +71,7 @@ public class AdminService {
         return userResponseList;
     }
 
-    public List<SellerDetailResponse> getSellerList(User user) {
+    public List<SellerDetailResponse> getSellerList(User user) { // 인증된 사용자 정보를 파라미터로 받아와야 되는지?
 
         UserRoleEnum role = SELLER;
 
@@ -84,10 +83,31 @@ public class AdminService {
                     () -> new IllegalArgumentException("존재하지 않는 판매자입니다.")
             );
 
-            SellerDetailResponse sellerDetailResponse = new SellerDetailResponse(seller.getUsername(), seller.getNickname(), seller.getPhoneNum(), seller.getSellerDetail());
+            SellerDetailResponse sellerDetailResponse = new SellerDetailResponse(
+                    seller.getUsername(),
+                    seller.getNickname(),
+                    seller.getPhoneNum(),
+                    seller.getSellerDetail());
             sellerDetailResponseList.add(sellerDetailResponse);
         }
 
         return sellerDetailResponseList;
+    }
+
+    public List<SellerPermissonResponse> getSellerPermissionList(User user) {
+
+        List<SellerPermission> sellerPermissionList = sellerPermissionRepository.findAllDesc();
+        List<SellerPermissonResponse> sellerPermissionResponseList = new ArrayList<>();
+
+        for(SellerPermission sellerPermission : sellerPermissionList) {
+            sellerPermissionResponseList.add(new SellerPermissonResponse(
+                    user.getUsername(),
+                    user.getNickname(),
+                    sellerPermission.getPhoneNum(),
+                    sellerPermission.getPermissionDetail()));
+
+        }
+
+        return sellerPermissionResponseList;
     }
 }
