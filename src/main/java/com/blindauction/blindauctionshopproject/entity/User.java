@@ -32,4 +32,12 @@ public class User {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
+
+// 생성자
+    public User(String username, String nickname, String password, UserRoleEnum role){
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+        this.role = role;
+    }
 }

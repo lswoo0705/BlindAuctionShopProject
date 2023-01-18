@@ -25,7 +25,7 @@ public class AdminController {
 
     private final JwtUtil jwtUtil;
     private final AdminService adminService;
-    
+
     @PostMapping("/admin/signup")
     public ResponseEntity<StatusResponse> signupAdmin (@RequestBody @Valid AdminSignupRequest adminSignupRequest) { // @Valid : @pattern 등 값제한 어노테이션 사용 위해 필요
         StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "관리자 회원가입 완료"); // httpStatus.0000 들은 안에 int value , httpstatus.series series, String reasonPhrase 필드 3개 있는데 그중 value( 500, 200 ) 만 가져오는거
@@ -46,5 +46,5 @@ public class AdminController {
 //        return adminService.getUserList(userDetails.getUser());
 //    }
 
-   
+
 }

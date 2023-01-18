@@ -26,9 +26,9 @@ public class AdminService {
     private UserRepository userRepository;
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
-        private static final String ADMIN_TOKEN = "eyJzdWIiOiJoZWxsb3dvcmxkIiwibm";
+    private static final String ADMIN_TOKEN = "eyJzdWIiOiJoZWxsb3dvcmxkIiwibm";
         
-        @Transactional
+    @Transactional
     public void signupAdmin(AdminSignupRequest adminSignupRequest) {
         String username = adminSignupRequest.getUsername();
         String nickname = adminSignupRequest.getNickname();
@@ -61,11 +61,4 @@ public class AdminService {
 
         return userResponseList; // 페이징처리.. 어떻게?
     }
-//
-//    public List<SellerDetailResponse> getSellerList(User user) {
-//
-//        User seller = userRepository.findByUsernameAndRole(user.getUsername(),user.getRole()).orElseThrow(
-//                () -> new IllegalArgumentException("존재하지 않는 아이디입니다.")
-//        );
-//    }
 }
