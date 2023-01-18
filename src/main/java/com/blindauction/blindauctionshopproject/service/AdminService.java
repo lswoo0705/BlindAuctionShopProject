@@ -3,13 +3,14 @@ package com.blindauction.blindauctionshopproject.service;
 
 import com.blindauction.blindauctionshopproject.dto.admin.AdminSignupRequest;
 
+import com.blindauction.blindauctionshopproject.dto.admin.SellerDetailResponse;
+import com.blindauction.blindauctionshopproject.dto.admin.SellerPermissonResponse;
 import com.blindauction.blindauctionshopproject.dto.admin.UserResponse;
-import com.blindauction.blindauctionshopproject.entity.Admin;
-import com.blindauction.blindauctionshopproject.entity.AdminRoleEnum;
+import com.blindauction.blindauctionshopproject.entity.*;
 
-import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.repository.AdminRepository;
 
+import com.blindauction.blindauctionshopproject.repository.SellerPermissionRepository;
 import com.blindauction.blindauctionshopproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,14 +21,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.SELLER;
+import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.USER;
+
 @Service
 @RequiredArgsConstructor
 public class AdminService {
     private UserRepository userRepository;
     private final AdminRepository adminRepository;
+
+    private SellerPermissionRepository sellerPermissionRepository;
     private final PasswordEncoder passwordEncoder;
     private static final String ADMIN_TOKEN = "eyJzdWIiOiJoZWxsb3dvcmxkIiwibm";
-        
+
     @Transactional
     public void signupAdmin(AdminSignupRequest adminSignupRequest) {
         String username = adminSignupRequest.getUsername();
@@ -35,30 +41,73 @@ public class AdminService {
         String password = passwordEncoder.encode(adminSignupRequest.getPassword());
 
         Optional<Admin> found = adminRepository.findByUsername(username);
-        if(found.isPresent()){
+        if (found.isPresent()) {
             throw new IllegalArgumentException("중복된 관리자 아이디가 존재합니다.");
         }
-        if(!adminSignupRequest.getAdminToken().equals(ADMIN_TOKEN)){
+        if (!adminSignupRequest.getAdminToken().equals(ADMIN_TOKEN)) {
             throw new IllegalArgumentException("관리자 토큰이 일치하지 않습니다");
         }
         AdminRoleEnum role = AdminRoleEnum.ADMIN;
 
-        Admin admin = new Admin(username,nickname,password,role);
+        Admin admin = new Admin(username, nickname, password, role);
         adminRepository.save(admin);
     }
-        
+
 
     public List<UserResponse> getUserList(User user) {
 
-        user = userRepository.findByUsername(user.getUsername()).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 아이디입니다.")
-        );
-
-        UserResponse userResponse = new UserResponse(user.getUsername(), user.getNickname());
+        List<User> userList = userRepository.findAllByRole(USER);
         List<UserResponse> userResponseList = new ArrayList<>();
 
-        userResponseList.add(userResponse);
+        for(long i = 0L; i < userList.size(); i++) { // 페이징 : 가입한 순서대로 표기되는지 확인해봐야 합니다
+            userRepository.findById(i).orElseThrow(
+                    () -> new IllegalArgumentException("존재하지 않는 고객입니다.")
+            );
 
-        return userResponseList; // 페이징처리.. 어떻게?
+            UserResponse userResponse = new UserResponse(user.getUsername(), user.getNickname());
+            userResponseList.add(userResponse);
+        }
+
+        return userResponseList;
+    }
+
+    public List<SellerDetailResponse> getSellerList(User user) { // 인증된 사용자 정보를 파라미터로 받아와야 되는지?
+
+        UserRoleEnum role = SELLER;
+
+        List<User> sellerList = userRepository.findAllByRole(role);
+        List<SellerDetailResponse> sellerDetailResponseList = new ArrayList<>();
+
+        for(long i = 0L; i < sellerList.size(); i++) { // 페이징 : 판매자 권한을 획득한 순서대로 표기되는지 확인해봐야 합니다
+            User seller = userRepository.findByIdAndRole(i, role).orElseThrow(
+                    () -> new IllegalArgumentException("존재하지 않는 판매자입니다.")
+            );
+
+            SellerDetailResponse sellerDetailResponse = new SellerDetailResponse(
+                    seller.getUsername(),
+                    seller.getNickname(),
+                    seller.getPhoneNum(),
+                    seller.getSellerDetail());
+            sellerDetailResponseList.add(sellerDetailResponse);
+        }
+
+        return sellerDetailResponseList;
+    }
+
+    public List<SellerPermissonResponse> getSellerPermissionList(User user) {
+
+        List<SellerPermission> sellerPermissionList = sellerPermissionRepository.findAllDesc();
+        List<SellerPermissonResponse> sellerPermissionResponseList = new ArrayList<>();
+
+        for(SellerPermission sellerPermission : sellerPermissionList) {
+            sellerPermissionResponseList.add(new SellerPermissonResponse(
+                    user.getUsername(),
+                    user.getNickname(),
+                    sellerPermission.getPhoneNum(),
+                    sellerPermission.getPermissionDetail()));
+
+        }
+
+        return sellerPermissionResponseList;
     }
 }

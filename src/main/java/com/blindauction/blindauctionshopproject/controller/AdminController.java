@@ -2,6 +2,8 @@ package com.blindauction.blindauctionshopproject.controller;
 
 import com.blindauction.blindauctionshopproject.dto.StatusResponse;
 import com.blindauction.blindauctionshopproject.dto.admin.AdminSignupRequest;
+import com.blindauction.blindauctionshopproject.dto.admin.SellerDetailResponse;
+import com.blindauction.blindauctionshopproject.dto.admin.SellerPermissonResponse;
 import com.blindauction.blindauctionshopproject.dto.admin.UserResponse;
 import com.blindauction.blindauctionshopproject.service.AdminService;
 import com.blindauction.blindauctionshopproject.util.jwtUtil.JwtUtil;
@@ -37,14 +39,19 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public List<UserResponse> getUserList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public List<UserResponse> getUserList(@AuthenticationPrincipal UserDetailsImpl userDetails) { // @AuthenticationPrincipal : 시큐리티를 사용한 인증/인가
         return adminService.getUserList(userDetails.getUser());
     }
-//
-//    @GetMapping("/sellers")
-//    public List<SellerDetailResponse> getSellerList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        return adminService.getUserList(userDetails.getUser());
-//    }
+
+    @GetMapping("/sellers")
+    public List<SellerDetailResponse> getSellerList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return adminService.getSellerList(userDetails.getUser());
+    }
+
+    @GetMapping("/seller-permissions")
+    public List<SellerPermissonResponse> getSellerPermissionList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return adminService.getSellerPermissionList(userDetails.getUser());
+    }
 
 
 }
