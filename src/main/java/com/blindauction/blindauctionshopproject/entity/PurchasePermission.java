@@ -8,7 +8,7 @@ import javax.persistence.Id;
 
 @Getter
 @NoArgsConstructor
-@Entity(name="PURCHASE-PERMISSION")
+@Entity(name="PURCHASE_PERMISSION")
 public class PurchasePermission {
     @Id
     private long id; //구매신청 id
