@@ -19,9 +19,10 @@ import java.nio.charset.StandardCharsets;
 public class SellerController {
     private final SellerService sellerService;
 
-    @PostMapping("/api/sellers/products")
+    // 나의 판매상품 등록
+    @PostMapping("/sellers/products")
     public ResponseEntity<StatusResponse> registerProduct(@RequestBody ProductRegisterRequest productRegisterRequest) {
-        StatusResponse statusResponse = new StatusResponse("등록완료", HttpStatus.CREATED.value());
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "등록 완료");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         sellerService.registerProduct(productRegisterRequest);

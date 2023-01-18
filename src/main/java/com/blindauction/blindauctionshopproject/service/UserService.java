@@ -33,6 +33,7 @@ public class UserService {
         sellerPermissionRepository.save(sellerPermission);
         return
     }
+
     //유저 회원가입
     public void signupUser(UserSignupRequest userSignupRequest) {
         String username = userSignupRequest.getUsername();
@@ -40,11 +41,11 @@ public class UserService {
         String password = passwordEncoder.encode(userSignupRequest.getPassword());
 
         Optional<User> foundUsername = userRepository.findByUsername(username);
-        if(foundUsername.isPresent()){
+        if (foundUsername.isPresent()) {
             throw new IllegalArgumentException("중복된 아이디가 존재합니다.");
         }
         Optional<User> foundNickname = userRepository.findByNickname(nickname);
-        if(foundNickname.isPresent()){
+        if (foundNickname.isPresent()) {
             throw new IllegalArgumentException("중복된 닉네임이 존재합니다.");
         }
         UserRoleEnum role = UserRoleEnum.USER;
