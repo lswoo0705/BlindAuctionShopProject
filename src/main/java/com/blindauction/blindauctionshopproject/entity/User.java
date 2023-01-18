@@ -40,4 +40,13 @@ public class User {
         this.password = password;
         this.role = role;
     }
+
+    public User(long id, String username, String nickname, String password, String phoneNum, UserRoleEnum role) {
+        this.id = id;
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+        this.phoneNum = phoneNum;
+        this.role = role;
+    }
 }

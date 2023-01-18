@@ -53,7 +53,6 @@ public class AdminService {
         adminRepository.save(admin);
     }
 
-
     public List<UserResponse> getUserList(User user) {
 
         List<User> userList = userRepository.findAllByRole(USER);
@@ -110,4 +109,25 @@ public class AdminService {
 
         return sellerPermissionResponseList;
     }
+
+    @Transactional
+    public void acceptSellerRole(Long userId, User user) {
+
+        SellerPermission sellerPermission = sellerPermissionRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 요청입니다.")
+        );
+
+        user = userRepository.findByIdAndRole(userId, USER).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 고객이거나 권한이 고객이 아닙니다.")
+        );
+
+       userRepository.save(
+               new User(userId,
+                       user.getUsername(),
+                       user.getNickname(),
+                       user.getPassword(),
+                       sellerPermission.getPhoneNum(),
+                       SELLER));
+    }
+
 }
