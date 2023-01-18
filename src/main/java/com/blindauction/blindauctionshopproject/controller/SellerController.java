@@ -1,8 +1,6 @@
 package com.blindauction.blindauctionshopproject.controller;
 
 import com.blindauction.blindauctionshopproject.dto.seller.ProductRegisterRequest;
-import com.blindauction.blindauctionshopproject.dto.seller.SellerProductResponse;
-import com.blindauction.blindauctionshopproject.dto.seller.StatusResponse;
 import com.blindauction.blindauctionshopproject.service.SellerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
