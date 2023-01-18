@@ -22,10 +22,9 @@ public class UserService {
     }
 
     // 판매자 등록 요청
-    public ResponseEntity registerSellerPermission(String phoneNum, String permissionDetail) {
+    public void registerSellerPermission(String phoneNum, String permissionDetail) {
         SellerPermission sellerPermission = new SellerPermission(phoneNum, permissionDetail);
         sellerPermissionRepository.save(sellerPermission);
-        return
     }
 
     //유저 회원가입
