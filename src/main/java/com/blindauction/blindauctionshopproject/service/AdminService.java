@@ -26,9 +26,9 @@ public class AdminService {
     private UserRepository userRepository;
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
-        private static final String ADMIN_TOKEN = "eyJzdWIiOiJoZWxsb3dvcmxkIiwibm";
+    private static final String ADMIN_TOKEN = "eyJzdWIiOiJoZWxsb3dvcmxkIiwibm";
         
-        @Transactional
+    @Transactional
     public void signupAdmin(AdminSignupRequest adminSignupRequest) {
         String username = adminSignupRequest.getUsername();
         String nickname = adminSignupRequest.getNickname();
