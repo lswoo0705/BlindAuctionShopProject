@@ -23,4 +23,15 @@ public class SellerService {
         productRepository.save(product);
 //        return new SellerProductResponse(product);
     }
+
+    // 나의 전체 판매상품 조회
+    @Transactional
+    public List<SellerProductResponse> getSellerProductList() {
+        List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
+        List<SellerProductResponse> sellerProductResponses = new ArrayList<>();
+        for (Product product : products) {
+            sellerProductResponses.add(new SellerProductResponse(product));
+        }
+        return sellerProductResponses;
+    }
 }
