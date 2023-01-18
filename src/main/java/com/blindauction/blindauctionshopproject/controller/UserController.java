@@ -6,19 +6,17 @@ import com.blindauction.blindauctionshopproject.dto.user.SellerPermissionRegiste
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileResponse;
 import com.blindauction.blindauctionshopproject.service.UserService;
 import com.blindauction.blindauctionshopproject.util.jwtUtil.JwtUtil;
+import com.blindauction.blindauctionshopproject.util.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
-import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,9 +36,10 @@ public class UserController {
     }
 
     // 나의 프로필 조회
-    @PostMapping("/profile")
-    public UserProfileResponse getUserProfile(Principal principal) {
-        userService.getUserProfile(principal.getName())
+    @GetMapping("/profile")
+    public UserProfileResponse getUserProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String userInfo = userDetails.getUsername();
+        return userService.getUserProfile(userInfo);
     }
 
     // 판매자 등록 요청
