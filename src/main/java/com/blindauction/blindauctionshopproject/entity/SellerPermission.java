@@ -16,5 +16,8 @@ public class SellerPermission {
     private String phoneNum; // 연락처
     private String permissionDetail; // 판매자 신청서 상세 내용
 
-
+    public SellerPermission(String phoneNum, String permissionDetail) {
+        this.phoneNum = phoneNum;
+        this.permissionDetail = permissionDetail;
+    }
 }
