@@ -61,11 +61,4 @@ public class AdminService {
 
         return userResponseList; // 페이징처리.. 어떻게?
     }
-//
-//    public List<SellerDetailResponse> getSellerList(User user) {
-//
-//        User seller = userRepository.findByUsernameAndRole(user.getUsername(),user.getRole()).orElseThrow(
-//                () -> new IllegalArgumentException("존재하지 않는 아이디입니다.")
-//        );
-//    }
 }
