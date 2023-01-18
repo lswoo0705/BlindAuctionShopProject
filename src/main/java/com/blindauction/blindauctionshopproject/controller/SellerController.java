@@ -2,6 +2,7 @@ package com.blindauction.blindauctionshopproject.controller;
 
 import com.blindauction.blindauctionshopproject.dto.StatusResponse;
 import com.blindauction.blindauctionshopproject.dto.seller.ProductRegisterRequest;
+import com.blindauction.blindauctionshopproject.dto.seller.SellerProductDetailResponse;
 import com.blindauction.blindauctionshopproject.dto.seller.SellerProductResponse;
 import com.blindauction.blindauctionshopproject.service.SellerService;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -36,5 +34,11 @@ public class SellerController {
     @GetMapping("/sellers/products/list")
     public List<SellerProductResponse> getSellerProductList() {
         return sellerService.getSellerProductList();
+    }
+
+    // 나의 개별 판매상품 조회
+    @GetMapping("/sellers/products/{productId}")
+    public SellerProductDetailResponse getSellerProduct(@PathVariable Long productId) {
+        return sellerService.getSellerProduct(productId);
     }
 }
