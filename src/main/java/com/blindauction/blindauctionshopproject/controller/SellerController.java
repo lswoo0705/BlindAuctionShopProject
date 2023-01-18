@@ -1,5 +1,6 @@
 package com.blindauction.blindauctionshopproject.controller;
 
+import com.blindauction.blindauctionshopproject.dto.StatusResponse;
 import com.blindauction.blindauctionshopproject.dto.seller.ProductRegisterRequest;
 import com.blindauction.blindauctionshopproject.service.SellerService;
 import lombok.RequiredArgsConstructor;
