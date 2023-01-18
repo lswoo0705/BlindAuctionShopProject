@@ -3,8 +3,7 @@ package com.blindauction.blindauctionshopproject.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
@@ -12,7 +11,13 @@ import javax.persistence.Id;
 public class PurchasePermission {
     @Id
     private long id; //구매신청 id
+
+    @JoinColumn(name = "title", nullable = false)  // 연관관계 다시 확인
+    @ManyToOne
     private Product product; //원본 판매글
+
+    @JoinColumn(name = "nickname", nullable = false)  // 연관관계 다시 확인
+    @ManyToOne
     private User bidder; //구매신청자
     private Long price; //제시한 가격
     private TransactionStatusEnum transactionStatus; //구매신청 처리상태

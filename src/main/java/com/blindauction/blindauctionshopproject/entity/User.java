@@ -22,6 +22,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+
     @Column(nullable = true)
     private String phoneNum;
 
@@ -31,6 +32,4 @@ public class User {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
-
-
 }

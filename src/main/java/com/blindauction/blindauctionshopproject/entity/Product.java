@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Getter
 @NoArgsConstructor
@@ -12,11 +14,18 @@ import javax.persistence.Id;
 public class Product extends TimeStamped{
     @Id
     private long id;
+
+    @JoinColumn(name = "nickname", nullable = false)  // 연관관계 다시 확인
+    @ManyToOne
     private User seller;
     private String title;
     private Long price;
     private String productDetail;
     private int bidderCnt;
 
-
+    public Product(String title, Long price, String productDetail) {
+        this.title = title;
+        this.price = price;
+        this.productDetail = productDetail;
+    }
 }
