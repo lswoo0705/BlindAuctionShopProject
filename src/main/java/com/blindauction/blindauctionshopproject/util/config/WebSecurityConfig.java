@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,8 +35,8 @@ public class WebSecurityConfig {
 
     @Bean //WebSecurity 는 패턴에 해당하는 리소스에 아예 SpringSecurity 를 적용하지 않게 설정 ( = 자유롭게 access )
     public WebSecurityCustomizer webSecurityCustomizer(){
-        return (web -> web.ignoring()
-                .requestMatchers(PathRequest.toH2Console())
+        return (web) -> web.ignoring()
+                .requestMatchers(PathRequest.toH2Console());
 
     }
 
@@ -53,11 +54,6 @@ public class WebSecurityConfig {
                 .antMatchers("/admin/login").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class); // jwtAuthFilter( 내부값 ) 작성 필요
-
-        //401 인증과정 실패시 에러처리
-        http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint); // 에러처리 dto 작성 필요
-        //403
-        http.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
 
         return http.build();
     }

@@ -49,6 +49,15 @@ public class UserController {
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK); // http 상태 정보, jwt 토큰이 담긴 헤더 를 리턴함
     }
 
+    // 일반 로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity<StatusResponse> logoutUser(HttpServletResponse response){
+    StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "로그아웃 완료");
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+    response.setHeader(JwtUtil.AUTHORIZATION_HEADER, "");
+    return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
+    }
 
     // 나의 프로필 조회
     @GetMapping("/profile")

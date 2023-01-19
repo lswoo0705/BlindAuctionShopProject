@@ -1,13 +1,12 @@
 package com.blindauction.blindauctionshopproject.service;
 
-import com.blindauction.blindauctionshopproject.dto.seller.ProductRegisterRequest;
-import com.blindauction.blindauctionshopproject.dto.seller.ProductUpdateRequest;
-import com.blindauction.blindauctionshopproject.dto.seller.SellerProductDetailResponse;
-import com.blindauction.blindauctionshopproject.dto.seller.SellerProductResponse;
+import com.blindauction.blindauctionshopproject.dto.seller.*;
 import com.blindauction.blindauctionshopproject.entity.Product;
 import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.repository.ProductRepository;
+import com.blindauction.blindauctionshopproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +17,8 @@ import java.util.List;
 @Service
 public class SellerService {
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 나의 판매상품 등록
     @Transactional
@@ -61,5 +62,24 @@ public class SellerService {
         product.update(productUpdateRequest.getTitle(), productUpdateRequest.getPrice(), productUpdateRequest.getProductDetail());
         productRepository.save(product);
         return new SellerProductResponse(product);
+    }
+
+    //나의 판매자 프로필 설정
+    @Transactional
+    public void getSellerProfile(SellerProfileUpdateRequest sellerProfileUpdateRequest, String username) {
+        //1. username 에 해당하는 유저가 있는지 찾는다.
+        User user = userRepository.findByUsername(username). orElseThrow(
+                () -> new IllegalArgumentException("해당 username 의 유저가 존재하지 않습니다")
+        );
+        //2. 비밀번호가 일치하는지 확인
+        if(!passwordEncoder.matches(sellerProfileUpdateRequest.getPassword(), user.getPassword())){
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        //3. 해당 유저가 셀러인지 확인한다
+        if(!user.isSeller()){
+            throw new IllegalArgumentException("판매자인 유저만 사용 가능한 기능입니다.");
+        }
+        //4. user 객체의 정보 변경 (닉네임, 셀러디테일)
+        user.updateSellerProfile(sellerProfileUpdateRequest.getNickname(), sellerProfileUpdateRequest.getSellerDetail());
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -29,7 +30,7 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/signup") // 관리자 회원가입
-    public ResponseEntity<StatusResponse> signupAdmin (@RequestBody @Valid AdminSignupRequest adminSignupRequest) { // @Valid : @pattern 등 값제한 어노테이션 사용 위해 필요
+    public ResponseEntity<StatusResponse> signupAdmin(@RequestBody @Valid AdminSignupRequest adminSignupRequest) { // @Valid : @pattern 등 값제한 어노테이션 사용 위해 필요
         StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "관리자 회원가입 완료"); // httpStatus.0000 들은 안에 int value , httpstatus.series series, String reasonPhrase 필드 3개 있는데 그중 value( 500, 200 ) 만 가져오는거
         HttpHeaders headers = new HttpHeaders(); //httpHeader 란 ? 클라이언트 - 서버 간 요청 또는 응답에 부가적 정보를 주고받을 수 있는 문자열
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8)); // 위에서 만든 헤더에 담을 Content 의 type 을 정의
@@ -67,6 +68,12 @@ public class AdminController {
     //관리자 로그인
 
     //관리자 로그아웃
-
-
+    @PostMapping("/logout")
+    public ResponseEntity<StatusResponse> logoutAdmin(HttpServletResponse response) {
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "로그아웃 완료");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, "");
+        return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
+    }
 }
