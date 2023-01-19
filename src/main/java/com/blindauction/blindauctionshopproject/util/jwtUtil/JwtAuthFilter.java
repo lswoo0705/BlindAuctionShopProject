@@ -1,6 +1,6 @@
 package com.blindauction.blindauctionshopproject.util.jwtUtil;
 
-import com.blindauction.blindauctionshopproject.dto.SecurityExceptionDto;
+import com.blindauction.blindauctionshopproject.dto.security.SecurityExceptionDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;

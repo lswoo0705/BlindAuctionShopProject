@@ -1,4 +1,4 @@
-package com.blindauction.blindauctionshopproject.dto;
+package com.blindauction.blindauctionshopproject.dto.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.blindauction.blindauctionshopproject.controller;
 
-import com.blindauction.blindauctionshopproject.dto.StatusResponse;
+import com.blindauction.blindauctionshopproject.dto.security.StatusResponse;
 import com.blindauction.blindauctionshopproject.dto.seller.ProductRegisterRequest;
 import com.blindauction.blindauctionshopproject.dto.seller.ProductUpdateRequest;
 import com.blindauction.blindauctionshopproject.dto.seller.SellerProductDetailResponse;

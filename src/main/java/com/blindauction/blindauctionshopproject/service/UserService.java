@@ -1,5 +1,7 @@
 package com.blindauction.blindauctionshopproject.service;
 
+import com.blindauction.blindauctionshopproject.dto.security.UsernameAndRoleResponse;
+import com.blindauction.blindauctionshopproject.dto.user.UserLoginRequest;
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileResponse;
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileUpdateRequest;
 import com.blindauction.blindauctionshopproject.entity.SellerPermission;
@@ -73,4 +75,17 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // user 로그인
+    public UsernameAndRoleResponse loginUser(UserLoginRequest userLoginRequest) {
+        String username = userLoginRequest.getUsername();
+        String password = userLoginRequest.getPassword();
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 id 는 존재하지 않습니다.")
+        );
+        if (!passwordEncoder.matches(password,user.getPassword())){
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
+        }
+        return new UsernameAndRoleResponse(username, user.getRole());
+    }
 }

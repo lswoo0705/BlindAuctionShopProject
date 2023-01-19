@@ -1,6 +1,7 @@
 package com.blindauction.blindauctionshopproject.controller;
 
-import com.blindauction.blindauctionshopproject.dto.StatusResponse;
+import com.blindauction.blindauctionshopproject.dto.security.StatusResponse;
+import com.blindauction.blindauctionshopproject.dto.security.UsernameAndRoleResponse;
 import com.blindauction.blindauctionshopproject.dto.user.*;
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileResponse;
 import com.blindauction.blindauctionshopproject.service.UserService;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
 
@@ -25,7 +27,8 @@ public class UserController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
 
-// 회원가입
+    // 일반 회원가입
+    @PostMapping("/signup")
     public ResponseEntity<StatusResponse> signupUser(@RequestBody @Valid UserSignupRequest userSignupRequest) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "회원가입 완료");
         HttpHeaders headers = new HttpHeaders();
@@ -34,6 +37,18 @@ public class UserController {
         userService.signupUser(userSignupRequest);
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
+
+    // 일반 로그인
+    @PostMapping("/login")
+    public ResponseEntity<StatusResponse> loginUser(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response){
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "로그인 완료"); // resposneEntity 용 http 상태 정보 담긴 dto 생성
+        HttpHeaders headers = new HttpHeaders(); // 헤더 생성
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8)); // header 의 정보 타입 지정
+        UsernameAndRoleResponse usernameAndRoleResponse = userService.loginUser(userLoginRequest); // 로그인 기능 수행 후 결과를 usernameAndRoleResponse Entity 에 담음
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(usernameAndRoleResponse.getUsername(), usernameAndRoleResponse.getRole())); // 헤더에 jwt 인증 토큰 담음
+        return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK); // http 상태 정보, jwt 토큰이 담긴 헤더 를 리턴함
+    }
+
 
     // 나의 프로필 조회
     @GetMapping("/profile")
