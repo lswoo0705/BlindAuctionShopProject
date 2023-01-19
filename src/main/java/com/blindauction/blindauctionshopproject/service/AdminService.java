@@ -95,7 +95,7 @@ public class AdminService {
 
     public List<SellerPermissonResponse> getSellerPermissionList(User user) {
 
-        List<SellerPermission> sellerPermissionList = sellerPermissionRepository.findAllDesc();
+        List<SellerPermission> sellerPermissionList = sellerPermissionRepository.findAllByOrderByIdDesc();
         List<SellerPermissonResponse> sellerPermissionResponseList = new ArrayList<>();
 
         for(SellerPermission sellerPermission : sellerPermissionList) {

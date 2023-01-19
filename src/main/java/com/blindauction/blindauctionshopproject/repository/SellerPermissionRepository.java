@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface SellerPermissionRepository extends JpaRepository<SellerPermission, Long> {
 
-    List<SellerPermission> findAllDesc();
+    List<SellerPermission> findAllByOrderByIdDesc(); // ◀ 이친구 수정필요
 
     Optional<SellerPermission> findById(Long userId);
 }
