@@ -42,6 +42,24 @@ public class UserController {
         return userService.getUserProfile(userInfo);
     }
 
+    // 나의 프로필 설정(수정)
+    @PutMapping("/profile")
+    public ResponseEntity<StatusResponse> updateUserProfile(@RequestBody UserProfileUpdateRequest userProfileUpdateRequest,
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String nickname = userProfileUpdateRequest.getNickname();
+        String password = userProfileUpdateRequest.getPassword();
+
+        String userInfo = userDetails.getUsername();
+
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "프로필 설정 완료");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+
+        userService.updateUserProfile(nickname, password, userInfo);
+
+        return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
+    }
+
     // 판매자 등록 요청
     @PostMapping("/seller-permission")
     public ResponseEntity<StatusResponse> registerSellerPermission(@RequestBody SellerPermissionRegisterRequest
@@ -54,6 +72,7 @@ public class UserController {
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
         userService.registerSellerPermission(phoneNum, permissionDetail);
+
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }
 }
