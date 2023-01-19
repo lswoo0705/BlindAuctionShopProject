@@ -4,7 +4,6 @@ import com.blindauction.blindauctionshopproject.dto.security.UsernameAndRoleResp
 import com.blindauction.blindauctionshopproject.dto.user.UserLoginRequest;
 import com.blindauction.blindauctionshopproject.dto.user.SellerResponse;
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileResponse;
-import com.blindauction.blindauctionshopproject.dto.user.UserProfileUpdateRequest;
 import com.blindauction.blindauctionshopproject.entity.SellerPermission;
 import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.entity.UserRoleEnum;
@@ -14,7 +13,6 @@ import com.blindauction.blindauctionshopproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

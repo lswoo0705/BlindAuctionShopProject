@@ -2,7 +2,6 @@ package com.blindauction.blindauctionshopproject.service;
 
 import com.blindauction.blindauctionshopproject.dto.seller.*;
 import com.blindauction.blindauctionshopproject.entity.Product;
-import com.blindauction.blindauctionshopproject.entity.PurchasePermission;
 import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.repository.ProductRepository;
 import com.blindauction.blindauctionshopproject.repository.UserRepository;
