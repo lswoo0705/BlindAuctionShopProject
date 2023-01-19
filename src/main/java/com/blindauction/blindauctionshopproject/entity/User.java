@@ -40,4 +40,9 @@ public class User {
         this.password = password;
         this.role = role;
     }
+
+    // 나의 프로필 설정(수정)
+    public void updateUserProfile(String nickname) {
+        this.nickname = nickname;
+    }
 }

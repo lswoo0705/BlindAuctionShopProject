@@ -1,6 +1,7 @@
 package com.blindauction.blindauctionshopproject.service;
 
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileResponse;
+import com.blindauction.blindauctionshopproject.dto.user.UserProfileUpdateRequest;
 import com.blindauction.blindauctionshopproject.entity.SellerPermission;
 import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.entity.UserRoleEnum;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @Service
@@ -28,7 +30,21 @@ public class UserService {
         );
         String userProfileName = user.getUsername();
         String userProfileNick = user.getNickname();
+
         return new UserProfileResponse(userProfileName, userProfileNick);
+    }
+
+    // 나의 프로필 설정(수정)
+    public void updateUserProfile(String nickname, String password, String userInfo) {
+        User user = userRepository.findByUsername(userInfo).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")
+        );
+
+        if (user.getUsername().equals(userInfo)) {
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                user.updateUserProfile(nickname);
+            } throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        } throw new IllegalArgumentException("본인의 프로필만 설정할 수 있습니다.");
     }
 
     // 판매자 등록 요청
