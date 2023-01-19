@@ -68,6 +68,4 @@ public class SellerController {
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }
-
-
 }
