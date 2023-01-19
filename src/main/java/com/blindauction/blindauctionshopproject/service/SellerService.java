@@ -49,7 +49,7 @@ public class SellerService {
 
     // 나의 판매상품 수정
     @Transactional
-    public SellerProductResponse updateSellerProduct(Long productId, ProductUpdateRequest productUpdateRequest, User user) {
+    public void updateSellerProduct(Long productId, ProductUpdateRequest productUpdateRequest, User user) {
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new IllegalArgumentException("id가 존재하지 않습니다.")
         );
@@ -60,6 +60,6 @@ public class SellerService {
 
         product.update(productUpdateRequest.getTitle(), productUpdateRequest.getPrice(), productUpdateRequest.getProductDetail());
         productRepository.save(product);
-        return new SellerProductResponse(product);
+//        return new SellerProductResponse(product);
     }
 }
