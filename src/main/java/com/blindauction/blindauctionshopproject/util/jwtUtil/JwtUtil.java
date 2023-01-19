@@ -1,11 +1,16 @@
 package com.blindauction.blindauctionshopproject.util.jwtUtil;
 
 import com.blindauction.blindauctionshopproject.entity.UserRoleEnum;
+import com.blindauction.blindauctionshopproject.util.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -19,6 +24,8 @@ import java.util.Date;
 @Component //Bean 객체 등록 관련 (정확히는 이해 못했음)
 @RequiredArgsConstructor
 public class JwtUtil {
+
+    UserDetailsServiceImpl userDetailsService;
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
@@ -81,5 +88,11 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
+    // 인증 객체 생성
+    public Authentication createAuthentication(String username) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username); // security의 userDetailsService 에서
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+    }
 
 }
