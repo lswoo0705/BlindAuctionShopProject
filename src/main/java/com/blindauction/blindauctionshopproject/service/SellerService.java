@@ -2,9 +2,12 @@ package com.blindauction.blindauctionshopproject.service;
 
 import com.blindauction.blindauctionshopproject.dto.seller.*;
 import com.blindauction.blindauctionshopproject.entity.Product;
+import com.blindauction.blindauctionshopproject.entity.PurchasePermission;
 import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.repository.ProductRepository;
 import com.blindauction.blindauctionshopproject.repository.UserRepository;
+import com.blindauction.blindauctionshopproject.repository.PurchasePermissionRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ import java.util.List;
 public class SellerService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+
+    private final PurchasePermissionRepository purchasePermissionRepository;
     private final PasswordEncoder passwordEncoder;
 
     // 나의 판매상품 등록
@@ -96,4 +101,22 @@ public class SellerService {
 
         productRepository.delete(product);
     }
+
+    // 전체상품 고객(구매)요청 목록 조회
+/*    @Transactional
+    public List<ProductPurchasePermissionResponse> getPurchasePermissionList() {
+        List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
+        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>(); // ?
+
+        for (Product product : products) {
+            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionBy();
+            List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
+            User user;
+            for (PurchasePermission purchasePermission : purchasePermissions) {
+                purchasePermissionResponses.add(new PurchasePermissionResponse(user,purchasePermission));
+            }
+            productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product));
+        }
+        return productPurchasePermissionResponses;
+    }*/
 }
