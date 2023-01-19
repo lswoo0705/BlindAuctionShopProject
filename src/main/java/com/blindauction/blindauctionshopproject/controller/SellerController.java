@@ -68,4 +68,10 @@ public class SellerController {
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }
+
+    // 전체상품 고객(구매)요청 목록 조회
+    @GetMapping("/sellers/purchase-permission")
+    public List<ProductPurchasePermissionResponse> getPurchasePermissionList() {
+        return sellerService.getPurchasePermissionList();
+    }
 }

@@ -2,6 +2,7 @@ package com.blindauction.blindauctionshopproject.service;
 
 import com.blindauction.blindauctionshopproject.dto.seller.*;
 import com.blindauction.blindauctionshopproject.entity.Product;
+import com.blindauction.blindauctionshopproject.entity.PurchasePermission;
 import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.repository.ProductRepository;
 import com.blindauction.blindauctionshopproject.repository.UserRepository;
@@ -43,7 +44,7 @@ public class SellerService {
         return sellerProductResponses;
     }
 
-    // 나의 개별 판매상품 조회
+    // 나의 개별 판매상품 조회  // bidderList 구현 안 됨
     @Transactional
     public SellerProductDetailResponse getSellerProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
@@ -102,20 +103,20 @@ public class SellerService {
     }
 
     // 전체상품 고객(구매)요청 목록 조회
-/*    @Transactional
+    @Transactional
     public List<ProductPurchasePermissionResponse> getPurchasePermissionList() {
         List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
-        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>(); // ?
+        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();
 
         for (Product product : products) {
             List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionBy();
             List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
-            User user;
+            User user = new User();  // ??
             for (PurchasePermission purchasePermission : purchasePermissions) {
                 purchasePermissionResponses.add(new PurchasePermissionResponse(user,purchasePermission));
             }
             productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product));
         }
         return productPurchasePermissionResponses;
-    }*/
+    }
 }

@@ -20,6 +20,7 @@ public class PurchasePermission {
     @ManyToOne
     private User bidder; //구매신청자
     private Long price; //제시한 가격
+    private String msg;
     private TransactionStatusEnum transactionStatus; //구매신청 처리상태
 
 }
