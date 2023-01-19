@@ -1,13 +1,11 @@
 package com.blindauction.blindauctionshopproject.controller;
 
+import com.blindauction.blindauctionshopproject.dto.product.ProductDetailResponse;
 import com.blindauction.blindauctionshopproject.dto.product.ProductResponse;
 import com.blindauction.blindauctionshopproject.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,5 +17,11 @@ public class ProductController {
     @GetMapping("/list")
     public Page<ProductResponse> getProductList(@RequestParam int page) {
         return productService.getProductList(page);
+    }
+
+    // 개별 판매상품 상세 조회
+    @GetMapping("/{productId}")
+    public ProductDetailResponse getProductById(@PathVariable Long productId) {
+        return productService.getProductById(productId);
     }
 }

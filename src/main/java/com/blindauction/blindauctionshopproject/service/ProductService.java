@@ -1,5 +1,6 @@
 package com.blindauction.blindauctionshopproject.service;
 
+import com.blindauction.blindauctionshopproject.dto.product.ProductDetailResponse;
 import com.blindauction.blindauctionshopproject.dto.product.ProductResponse;
 import com.blindauction.blindauctionshopproject.entity.Product;
 import com.blindauction.blindauctionshopproject.repository.ProductRepository;
@@ -25,5 +26,13 @@ public class ProductService {
         // 리스트 스트림으로 할 때
 //        return products.stream().map(ProductResponse::new).collect(Collectors.toList());
 //                                 내보내려는 형식                리스트로 만들어주겠다
+    }
+
+    // 개별 판매상품 상세 조회
+    public ProductDetailResponse getProductById(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new IllegalArgumentException("해당하는 Id가 존재하지 않습니다.")
+        );
+        return new ProductDetailResponse(product);
     }
 }
