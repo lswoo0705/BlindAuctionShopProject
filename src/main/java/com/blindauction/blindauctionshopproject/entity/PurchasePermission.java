@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity(name="PURCHASE_PERMISSION")
 public class PurchasePermission {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id; //구매신청 id
 
     @JoinColumn(name = "title", nullable = false)  // 연관관계 다시 확인
@@ -19,8 +20,18 @@ public class PurchasePermission {
     @JoinColumn(name = "nickname", nullable = false)  // 연관관계 다시 확인
     @ManyToOne
     private User bidder; //구매신청자
+
+    @Column(nullable = false)
     private Long price; //제시한 가격
-    private String msg;
+
+    @Column(nullable = false)
+    private String msg; //요청 메시지
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private TransactionStatusEnum transactionStatus; //구매신청 처리상태
 
+    public PurchasePermission(TransactionStatusEnum transactionStatus) {
+        this.transactionStatus = transactionStatus;
+    }
 }

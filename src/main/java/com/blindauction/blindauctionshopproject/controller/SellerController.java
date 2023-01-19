@@ -74,4 +74,12 @@ public class SellerController {
     public List<ProductPurchasePermissionResponse> getPurchasePermissionList() {
         return sellerService.getPurchasePermissionList();
     }
+
+    // 고객(거래)요청 수락&완료
+    @PutMapping("/sellers/purchase-permission/{permissionId}")
+    public ResponseEntity<StatusResponse> updatePurchasePermission(@PathVariable Long permissionId, @AuthenticationPrincipal UserDetailsImpl userDetails, User username) {
+        sellerService.updatePurchasePermission(permissionId, username);
+        return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "구매 요청 허락"));
+//        return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "구매 요청 거부"));
+    }
 }

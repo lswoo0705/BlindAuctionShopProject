@@ -3,6 +3,7 @@ package com.blindauction.blindauctionshopproject.service;
 import com.blindauction.blindauctionshopproject.dto.seller.*;
 import com.blindauction.blindauctionshopproject.entity.Product;
 import com.blindauction.blindauctionshopproject.entity.PurchasePermission;
+import com.blindauction.blindauctionshopproject.entity.TransactionStatusEnum;
 import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.repository.ProductRepository;
 import com.blindauction.blindauctionshopproject.repository.UserRepository;
@@ -118,5 +119,30 @@ public class SellerService {
             productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product));
         }
         return productPurchasePermissionResponses;
+    }
+
+    // 고객(거래)요청 수락&완료
+    @Transactional
+    public void updatePurchasePermission(Long permissionId, User username) {
+        PurchasePermission purchasePermission = purchasePermissionRepository.findById(permissionId).orElseThrow(
+                () -> new IllegalArgumentException("구매 요청이 존재하지 않습니다.")
+        );
+
+        if (!purchasePermission.getBidder().equals(username)) {
+            throw new IllegalArgumentException("경매자만 수정할 수 있습니다.");
+        }
+
+//        PurchasePermission purchasePermission1 = purchasePermissionRepository.findByTransactionStatus(TransactionStatusEnum.WAITING).orElseThrow(
+//                () -> new IllegalArgumentException("진행 중이 아닙니다.")
+//        );
+
+        purchasePermissionRepository.save(
+                new PurchasePermission(TransactionStatusEnum.ACCEPTANCE)
+        );
+
+        // 거부...
+//        purchasePermissionRepository.save(
+//                new PurchasePermission(TransactionStatusEnum.REFUSAL)
+//        );
     }
 }
