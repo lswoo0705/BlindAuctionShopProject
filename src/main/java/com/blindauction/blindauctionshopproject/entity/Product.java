@@ -3,10 +3,7 @@ package com.blindauction.blindauctionshopproject.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
@@ -24,6 +21,12 @@ public class Product extends TimeStamped{
     private int bidderCnt;
 
     public Product(String title, Long price, String productDetail) {
+        this.title = title;
+        this.price = price;
+        this.productDetail = productDetail;
+    }
+
+    public void update(String title, Long price, String productDetail) {
         this.title = title;
         this.price = price;
         this.productDetail = productDetail;
