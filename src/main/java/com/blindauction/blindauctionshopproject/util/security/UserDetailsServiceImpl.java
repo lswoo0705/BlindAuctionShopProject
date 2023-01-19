@@ -15,7 +15,8 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
-
+// 제네릭 타입<>으로 받으면 변수에따라 갈라쓸수있다.
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // 레퍼지토리에서 username 을 통해 유저를 가져온다
         //1. userRepository 에서 username 을 찾아
         if (userRepository.findByUsername(username).isPresent()) {

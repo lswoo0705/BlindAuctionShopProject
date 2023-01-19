@@ -41,7 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     // 인증 정보
     public void setAuthentication(String username) {
         SecurityContext context = SecurityContextHolder.createEmptyContext(); // SecurityContext가 Authentication 을 가지고 있고 관리함. 그 SC 를 SecurityContextHolder 가 들고있음.
-        Authentication authentication = jwtUtil.createAuthentication(username); // 인증된 사용자 정보를 담고있는 Authentication
+        Authentication authentication = this.createAuthentication(username); // 인증된 사용자 정보를 담고있는 Authentication
         context.setAuthentication(authentication);
 
         SecurityContextHolder.setContext(context);
