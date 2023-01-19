@@ -2,6 +2,7 @@ package com.blindauction.blindauctionshopproject.service;
 
 import com.blindauction.blindauctionshopproject.dto.security.UsernameAndRoleResponse;
 import com.blindauction.blindauctionshopproject.dto.user.UserLoginRequest;
+import com.blindauction.blindauctionshopproject.dto.user.SellerResponse;
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileResponse;
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileUpdateRequest;
 import com.blindauction.blindauctionshopproject.entity.SellerPermission;
@@ -13,9 +14,12 @@ import com.blindauction.blindauctionshopproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.SELLER;
 
 @Service
 @RequiredArgsConstructor
@@ -83,9 +87,43 @@ public class UserService {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 id 는 존재하지 않습니다.")
         );
-        if (!passwordEncoder.matches(password,user.getPassword())){
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
         }
         return new UsernameAndRoleResponse(username, user.getRole());
+    }
+    //(유저) 판매자 목록 조회
+    public List<SellerResponse> getSellerList() {
+
+        UserRoleEnum role = SELLER;
+
+        List<User> sellerList = userRepository.findAllByRole(role);
+        List<SellerResponse> sellerResponseList = new ArrayList<>();
+
+        for(long i = 0L; i < sellerList.size(); i++) {
+            User seller = userRepository.findByIdAndRole(i, role).orElseThrow(
+                    () -> new IllegalArgumentException("존재하지 않는 판매자입니다.")
+            );
+
+            SellerResponse sellerResponse = new SellerResponse(
+                    seller.getUsername(),
+                    seller.getNickname(),
+                    seller.getSellerDetail());
+            sellerResponseList.add(sellerResponse);
+        }
+
+        return sellerResponseList;
+    }
+
+    public SellerResponse getSellerById(Long userId) {
+
+        User seller = userRepository.findByIdAndRole(userId, SELLER).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 판매자입니다.")
+        );
+
+        return new SellerResponse(
+                seller.getUsername(),
+                seller.getNickname(),
+                seller.getSellerDetail());
     }
 }
