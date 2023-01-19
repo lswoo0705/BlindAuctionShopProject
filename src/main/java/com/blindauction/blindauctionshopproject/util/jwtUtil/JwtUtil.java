@@ -1,6 +1,8 @@
 package com.blindauction.blindauctionshopproject.util.jwtUtil;
 
+import com.blindauction.blindauctionshopproject.entity.AdminRoleEnum;
 import com.blindauction.blindauctionshopproject.entity.UserRoleEnum;
+import com.blindauction.blindauctionshopproject.util.security.AdminUserDetailsImpl;
 import com.blindauction.blindauctionshopproject.util.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -51,8 +53,22 @@ public class JwtUtil {
         return null;
     }
 
-    // 토큰 생성
+    // 토큰 생성 (일반유저)
     public String createToken(String username, UserRoleEnum role) {
+        Date date = new Date();
+
+        return BEARER_PREFIX +
+                Jwts.builder()
+                        .setSubject(username)
+                        .claim(AUTHORIZATION_KEY, role)
+                        .setExpiration(new Date(date.getTime() + TOKEN_TIME))
+                        .setIssuedAt(date)
+                        .signWith(key, signatureAlgorithm)
+                        .compact();
+    }
+
+    // 토큰 생성 (관리자)
+    public String createAdminToken(String username, AdminRoleEnum role) {
         Date date = new Date();
 
         return BEARER_PREFIX +

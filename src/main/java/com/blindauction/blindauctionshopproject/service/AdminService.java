@@ -1,11 +1,10 @@
 package com.blindauction.blindauctionshopproject.service;
 
 
-import com.blindauction.blindauctionshopproject.dto.admin.AdminSignupRequest;
+import com.blindauction.blindauctionshopproject.dto.admin.*;
 
-import com.blindauction.blindauctionshopproject.dto.admin.SellerDetailResponse;
-import com.blindauction.blindauctionshopproject.dto.admin.SellerPermissonResponse;
-import com.blindauction.blindauctionshopproject.dto.admin.UserResponse;
+import com.blindauction.blindauctionshopproject.dto.security.AdminUsernameAndRoleResponse;
+import com.blindauction.blindauctionshopproject.dto.security.UsernameAndRoleResponse;
 import com.blindauction.blindauctionshopproject.entity.*;
 
 import com.blindauction.blindauctionshopproject.repository.AdminRepository;
@@ -143,5 +142,19 @@ public class AdminService {
                         seller.getNickname(),
                         seller.getPassword(),
                         USER));
+    }
+
+    //관리자 로그인
+    public AdminUsernameAndRoleResponse loginAdmin(AdminLoginRequest adminLoginRequest) {
+        String username = adminLoginRequest.getUsername();
+        String password = adminLoginRequest.getPassword();
+
+        Admin admin = adminRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 id 는 존재하지 않습니다.")
+        );
+        if (!passwordEncoder.matches(password, admin.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
+        }
+        return new AdminUsernameAndRoleResponse(username, admin.getRole());
     }
 }

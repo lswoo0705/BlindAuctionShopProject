@@ -24,8 +24,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig {
     private final JwtUtil jwtUtil;
-    private final UserDetailsServiceImpl userDetailsService;
-    private final UserRepository userRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
