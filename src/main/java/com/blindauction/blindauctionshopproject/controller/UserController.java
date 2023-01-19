@@ -77,8 +77,14 @@ public class UserController {
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }
 
-    @GetMapping("/sellers-list")
+    @GetMapping("/sellers-list") // 페이징 타입으로?
+    // 페이징 : 페이지 타입으로 반환하면 리스트에 담겨져서 나오는지?
     public List<SellerResponse> getSellerList() {
         return userService.getSellerList();
+    }
+
+    @GetMapping("/sellers-list/{userId}")
+    public SellerResponse getSellerById(@PathVariable Long userId) {
+        return userService.getSellerById(userId);
     }
 }

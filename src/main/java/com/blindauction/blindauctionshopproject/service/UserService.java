@@ -99,4 +99,16 @@ public class UserService {
 
         return sellerResponseList;
     }
+
+    public SellerResponse getSellerById(Long userId) {
+
+        User seller = userRepository.findByIdAndRole(userId, SELLER).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 판매자입니다.")
+        );
+
+        return new SellerResponse(
+                seller.getUsername(),
+                seller.getNickname(),
+                seller.getSellerDetail());
+    }
 }
