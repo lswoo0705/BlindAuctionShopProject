@@ -1,9 +1,6 @@
 package com.blindauction.blindauctionshopproject.service;
 
-import com.blindauction.blindauctionshopproject.dto.seller.ProductRegisterRequest;
-import com.blindauction.blindauctionshopproject.dto.seller.ProductUpdateRequest;
-import com.blindauction.blindauctionshopproject.dto.seller.SellerProductDetailResponse;
-import com.blindauction.blindauctionshopproject.dto.seller.SellerProductResponse;
+import com.blindauction.blindauctionshopproject.dto.seller.*;
 import com.blindauction.blindauctionshopproject.entity.Product;
 import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.repository.ProductRepository;
@@ -51,7 +48,7 @@ public class SellerService {
     @Transactional
     public void updateSellerProduct(Long productId, ProductUpdateRequest productUpdateRequest, User user) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new IllegalArgumentException("id가 존재하지 않습니다.")
+                () -> new IllegalArgumentException("게시물이 존재하지 않습니다.")
         );
 
         if (product.getSeller().getId() != user.getId()) {
@@ -61,5 +58,19 @@ public class SellerService {
         product.update(productUpdateRequest.getTitle(), productUpdateRequest.getPrice(), productUpdateRequest.getProductDetail());
         productRepository.save(product);
 //        return new SellerProductResponse(product);
+    }
+
+    // 나의 판매상품 삭제
+    @Transactional
+    public void deleteSellerProduct(Long productId, User user) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new IllegalArgumentException("게시물이 존재하지 않습니다.")
+        );
+
+        if (product.getSeller().getId() != user.getId()) {
+            throw new IllegalArgumentException("판매자가 아닙니다.");
+        }
+
+        productRepository.delete(product);
     }
 }

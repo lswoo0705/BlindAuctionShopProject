@@ -53,4 +53,14 @@ public class SellerController {
         sellerService.updateSellerProduct(productId, productUpdateRequest, user);
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
+
+    // 나의 판매상품 삭제
+    @DeleteMapping("/sellers/products/{productId}")
+    public ResponseEntity<StatusResponse> deleteSellerProduct(@PathVariable Long productId, User user) {
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "삭제 완료");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        sellerService.deleteSellerProduct(productId, user);
+        return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
+    }
 }
