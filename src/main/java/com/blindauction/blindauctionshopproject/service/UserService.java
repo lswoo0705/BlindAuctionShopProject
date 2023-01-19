@@ -1,5 +1,6 @@
 package com.blindauction.blindauctionshopproject.service;
 
+import com.blindauction.blindauctionshopproject.dto.user.SellerResponse;
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileResponse;
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileUpdateRequest;
 import com.blindauction.blindauctionshopproject.entity.SellerPermission;
@@ -13,7 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.SELLER;
 
 @Service
 @RequiredArgsConstructor
@@ -73,4 +78,25 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public List<SellerResponse> getSellerList() {
+
+        UserRoleEnum role = SELLER;
+
+        List<User> sellerList = userRepository.findAllByRole(role);
+        List<SellerResponse> sellerResponseList = new ArrayList<>();
+
+        for(long i = 0L; i < sellerList.size(); i++) {
+            User seller = userRepository.findByIdAndRole(i, role).orElseThrow(
+                    () -> new IllegalArgumentException("존재하지 않는 판매자입니다.")
+            );
+
+            SellerResponse sellerResponse = new SellerResponse(
+                    seller.getUsername(),
+                    seller.getNickname(),
+                    seller.getSellerDetail());
+            sellerResponseList.add(sellerResponse);
+        }
+
+        return sellerResponseList;
+    }
 }

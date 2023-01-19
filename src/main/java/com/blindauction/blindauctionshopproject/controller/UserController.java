@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 
 @RestController
@@ -74,5 +75,10 @@ public class UserController {
         userService.registerSellerPermission(phoneNum, permissionDetail);
 
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/sellers-list")
+    public List<SellerResponse> getSellerList() {
+        return userService.getSellerList();
     }
 }
