@@ -1,10 +1,15 @@
 package com.blindauction.blindauctionshopproject.controller;
 
+
 import com.blindauction.blindauctionshopproject.dto.security.StatusResponse;
 import com.blindauction.blindauctionshopproject.dto.seller.*;
+import com.blindauction.blindauctionshopproject.dto.seller.ProductRegisterRequest;
+import com.blindauction.blindauctionshopproject.dto.seller.ProductUpdateRequest;
+import com.blindauction.blindauctionshopproject.dto.seller.SellerProductDetailResponse;
+import com.blindauction.blindauctionshopproject.dto.seller.SellerProductResponse;
+import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.service.SellerService;
 import com.blindauction.blindauctionshopproject.util.security.UserDetailsImpl;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -45,11 +50,11 @@ public class SellerController {
 
     // 나의 판매상품 수정
     @PutMapping("/sellers/products/{productId}")
-    public ResponseEntity<StatusResponse> updateSellerProduct(@PathVariable Long productId, @RequestBody ProductUpdateRequest productUpdateRequest) {
-        StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "등록 완료");
+    public ResponseEntity<StatusResponse> updateSellerProduct(@PathVariable Long productId, @RequestBody ProductUpdateRequest productUpdateRequest, User user) {
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "수정 완료");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-//        sellerService.updateSellerProduct(productId, productUpdateRequest, user);
+        sellerService.updateSellerProduct(productId, productUpdateRequest, user);
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
 
