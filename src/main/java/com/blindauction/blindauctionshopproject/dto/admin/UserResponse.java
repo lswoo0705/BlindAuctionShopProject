@@ -10,8 +10,8 @@ public class UserResponse {
 
     String nickname;
 
-    public UserResponse(String username, String nickname) {
-        this.username = username;
-        this.nickname = nickname;
+    public UserResponse(User user) {
+        this.username = user.getUsername();
+        this.nickname = user.getNickname();
     }
 }

@@ -11,10 +11,12 @@ import com.blindauction.blindauctionshopproject.repository.SellerPermissionRepos
 import com.blindauction.blindauctionshopproject.dto.user.UserSignupRequest;
 import com.blindauction.blindauctionshopproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.SELLER;
@@ -90,29 +92,9 @@ public class UserService {
         }
         return new UsernameAndRoleResponse(username, user.getRole());
     }
-    //(유저) 판매자 목록 조회
-    public List<SellerResponse> getSellerList() {
 
-        UserRoleEnum role = SELLER;
-
-        List<User> sellerList = userRepository.findAllByRole(role);
-        List<SellerResponse> sellerResponseList = new ArrayList<>();
-
-        for(long i = 0L; i < sellerList.size(); i++) {
-            User seller = userRepository.findByIdAndRole(i, role).orElseThrow(
-                    () -> new IllegalArgumentException("존재하지 않는 판매자입니다.")
-            );
-
-            SellerResponse sellerResponse = new SellerResponse(
-                    seller.getUsername(),
-                    seller.getNickname(),
-                    seller.getSellerDetail());
-            sellerResponseList.add(sellerResponse);
-        }
-
-        return sellerResponseList;
-    }
-
+    // 판매자 개별 조회
+    @Transactional
     public SellerResponse getSellerById(Long userId) {
 
         User seller = userRepository.findByIdAndRole(userId, SELLER).orElseThrow(
@@ -123,5 +105,12 @@ public class UserService {
                 seller.getUsername(),
                 seller.getNickname(),
                 seller.getSellerDetail());
+    }
+
+    // 판매자 목록 조회
+    @Transactional
+    public Page<SellerResponse> getSellerList(Long userId) {
+        return userRepository.findAllByOrderByIdDesc(userId, SELLER, PageRequest.of(10, 10))
+                .map(user -> new SellerResponse(user.getUsername(), user.getNickname(), user.getSellerDetail()));
     }
 }

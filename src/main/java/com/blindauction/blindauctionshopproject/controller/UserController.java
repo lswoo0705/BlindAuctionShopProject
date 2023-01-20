@@ -8,6 +8,7 @@ import com.blindauction.blindauctionshopproject.service.UserService;
 import com.blindauction.blindauctionshopproject.util.jwtUtil.JwtUtil;
 import com.blindauction.blindauctionshopproject.util.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 
 @RestController
@@ -101,12 +101,13 @@ public class UserController {
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }
 
-    @GetMapping("/sellers-list") // 페이징 타입으로?
-    // 페이징 : 페이지 타입으로 반환하면 리스트에 담겨져서 나오는지?
-    public List<SellerResponse> getSellerList() {
-        return userService.getSellerList();
+    // 판매자 목록 조회
+    @GetMapping("/sellers-list")
+    public Page<SellerResponse> getSellerList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return userService.getSellerList(userDetails.getUser().getId());
     }
 
+    // 판매자 개별 조회
     @GetMapping("/sellers-list/{userId}")
     public SellerResponse getSellerById(@PathVariable Long userId) {
         return userService.getSellerById(userId);

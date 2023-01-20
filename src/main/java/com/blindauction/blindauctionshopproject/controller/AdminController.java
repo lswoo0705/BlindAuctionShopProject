@@ -3,12 +3,13 @@ package com.blindauction.blindauctionshopproject.controller;
 import com.blindauction.blindauctionshopproject.dto.security.StatusResponse;
 import com.blindauction.blindauctionshopproject.dto.admin.AdminSignupRequest;
 import com.blindauction.blindauctionshopproject.dto.admin.SellerDetailResponse;
-import com.blindauction.blindauctionshopproject.dto.admin.SellerPermissonResponse;
+import com.blindauction.blindauctionshopproject.dto.admin.SellerPermissionResponse;
 import com.blindauction.blindauctionshopproject.dto.admin.UserResponse;
 import com.blindauction.blindauctionshopproject.service.AdminService;
 import com.blindauction.blindauctionshopproject.util.jwtUtil.JwtUtil;
 import com.blindauction.blindauctionshopproject.util.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -38,29 +38,30 @@ public class AdminController {
         adminService.signupAdmin(adminSignupRequest); // userService 에서 회원가입 기능 작동
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
-    @GetMapping("/users")
-    public List<UserResponse> getUserList(@AuthenticationPrincipal UserDetailsImpl userDetails) { // @AuthenticationPrincipal : 시큐리티를 사용한 인증/인가
-        return adminService.getUserList(userDetails.getUser());
+
+    @GetMapping("/users") // 회원목록 조회
+    public Page<UserResponse> getUserList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return adminService.getUserList(userDetails.getUser().getId());
     }
 
-    @GetMapping("/sellers")
-    public List<SellerDetailResponse> getSellerList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return adminService.getSellerList(userDetails.getUser());
+    @GetMapping("/sellers") // 판매자목록 조회
+    public Page<SellerDetailResponse> getSellerList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return adminService.getSellerList(userDetails.getUser().getId());
     }
 
-    @GetMapping("/seller-permissions")
-    public List<SellerPermissonResponse> getSellerPermissionList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return adminService.getSellerPermissionList(userDetails.getUser());
+    @GetMapping("/seller-permissions") // 판매자권한 요청목록 조회
+    public Page<SellerPermissionResponse> getSellerPermissionList() {
+        return adminService.getSellerPermissionList();
     }
 
-    @PutMapping("/role/{userId}")
+    @PutMapping("/role/{userId}") // 판매자 권한 승인
     public ResponseEntity<StatusResponse> acceptSellerRole(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long userId) {
         adminService.acceptSellerRole(userId, userDetails.getUser());
         return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "권한 승인"));
     }
 
-    @PutMapping("/role/delete/{userId}")
-    public ResponseEntity<StatusResponse> deleteSellerRole(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long userId) {
+    @PutMapping("/role/delete/{userId}") // 판매자 권한 삭제
+    public ResponseEntity<StatusResponse> deleteSellerRole(@PathVariable Long userId) {
         adminService.deleteSellerRole(userId);
         return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "권한 삭제"));
     }
