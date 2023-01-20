@@ -10,9 +10,10 @@ import javax.persistence.*;
 @Entity(name="SELLER_PERMISSION")
 public class SellerPermission extends TimeStamped{
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id; // 판매글 id
 
-    @JoinColumn(nullable = false)  // 연관관계 다시 확인
+    @JoinColumn(name = "user_id", nullable = false)  // 연관관계 다시 확인
     @ManyToOne
     private User user; // 셀러가 되고싶은 회원
     private String phoneNum; // 연락처

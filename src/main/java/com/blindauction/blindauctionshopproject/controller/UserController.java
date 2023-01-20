@@ -101,7 +101,7 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-        userService.registerSellerPermission(phoneNum, permissionDetail);
+        userService.registerSellerPermission(phoneNum, permissionDetail, username);
 
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }

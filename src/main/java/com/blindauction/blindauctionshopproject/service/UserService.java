@@ -41,6 +41,7 @@ public class UserService {
     }
 
     // 나의 프로필 설정(수정)
+    @Transactional
     public void updateUserProfile(String nickname, String password, String userInfo) {
         User user = userRepository.findByUsername(userInfo).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")
@@ -49,17 +50,19 @@ public class UserService {
         if (user.getUsername().equals(userInfo)) {
             if (passwordEncoder.matches(password, user.getPassword())) {
                 user.updateUserProfile(nickname);
-            } throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        } throw new IllegalArgumentException("본인의 프로필만 설정할 수 있습니다.");
+            } else throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        } else throw new IllegalArgumentException("본인의 프로필만 설정할 수 있습니다.");
     }
 
     // 판매자 등록 요청
+    @Transactional
     public void registerSellerPermission(String phoneNum, String permissionDetail, String username) {
-//        //1. username 의 유저가 있는지 생성하고
-//        SellerPermission sellerPermission = new SellerPermission(phoneNum, permissionDetail);
-//        sellerPermissionRepository.save(sellerPermission);
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")
+        );
 
-        //2. SellerPermission객체를 생성후 레퍼지토리 넣기 (1. phonnum, permissiondetail,
+        SellerPermission sellerPermission = new SellerPermission(user, phoneNum, permissionDetail);
+        sellerPermissionRepository.save(sellerPermission);
     }
 
     //유저 회원가입
