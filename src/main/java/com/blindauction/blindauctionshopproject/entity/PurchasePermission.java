@@ -35,15 +35,13 @@ public class PurchasePermission {
         this.transactionStatus = transactionStatus;
     }
 
-    public void update(TransactionStatusEnum transactionStatus) {
-        this.transactionStatus = transactionStatus;
+    public void updateStatus() {
+        this.transactionStatus = TransactionStatusEnum.ACCEPTANCE;
     }
-//    public boolean isPermissionWaiting() {
-//        return this.getTransactionStatus().equals(TransactionStatusEnum.WAITING);
-//    }
-//    public boolean isPermissionAccept() {
-//        return this.getTransactionStatus().
-//    }
+
+    public void refusalStatus() {
+
+    }
 
     // 생성자
     public PurchasePermission(Product product, User bidder, String msg, Long price, TransactionStatusEnum transactionStatus) {
