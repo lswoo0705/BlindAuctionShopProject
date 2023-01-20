@@ -42,13 +42,13 @@ public class AdminController {
     }
 
     @GetMapping("/users") // 회원목록 조회
-    public Page<UserResponse> getUserList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return adminService.getUserList(userDetails.getUser().getId());
+    public Page<UserResponse> getUserList() {
+        return adminService.getUserList();
     }
 
     @GetMapping("/sellers") // 판매자목록 조회
-    public Page<SellerDetailResponse> getSellerList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return adminService.getSellerList(userDetails.getUser().getId());
+    public Page<SellerDetailResponse> getSellerList() {
+        return adminService.getSellerList();
     }
 
     @GetMapping("/seller-permissions") // 판매자권한 요청목록 조회
