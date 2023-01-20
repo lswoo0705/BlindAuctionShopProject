@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Getter
+@NoArgsConstructor
 @Entity(name="PRODUCT")
 public class Product extends TimeStamped{
     @Id
@@ -30,6 +31,7 @@ public class Product extends TimeStamped{
     private int bidderCnt;
 
     public Product(User seller, String title, Long price, String productDetail) {
+        this.seller = seller;
         this.title = title;
         this.price = price;
         this.productDetail = productDetail;
@@ -38,7 +40,7 @@ public class Product extends TimeStamped{
 
 
 
-    public void update(String title, Long price, String productDetail) {
+    public void update(User seller, String title, Long price, String productDetail) {
         this.title = title;
         this.price = price;
         this.productDetail = productDetail;

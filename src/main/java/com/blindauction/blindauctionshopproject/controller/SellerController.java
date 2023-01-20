@@ -53,21 +53,23 @@ public class SellerController {
 
     // 나의 판매상품 수정
     @PutMapping("/sellers/products/{productId}")
-    public ResponseEntity<StatusResponse> updateSellerProduct(@PathVariable Long productId, @RequestBody ProductUpdateRequest productUpdateRequest, User user) {
+    public ResponseEntity<StatusResponse> updateSellerProduct(@PathVariable Long productId, @RequestBody ProductUpdateRequest productUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "수정 완료");
+        String username = userDetails.getUsername();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        sellerService.updateSellerProduct(productId, productUpdateRequest, user);
+        sellerService.updateSellerProduct(productId, productUpdateRequest, username);
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
 
     // 나의 판매상품 삭제
     @DeleteMapping("/sellers/products/{productId}")
-    public ResponseEntity<StatusResponse> deleteSellerProduct(@PathVariable Long productId, @RequestBody User user) {
+    public ResponseEntity<StatusResponse> deleteSellerProduct(@PathVariable Long productId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "상품 삭제 완료");
+        String username = userDetails.getUsername();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        sellerService.deleteSellerProduct(productId, user);
+        sellerService.deleteSellerProduct(productId, username);
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
 

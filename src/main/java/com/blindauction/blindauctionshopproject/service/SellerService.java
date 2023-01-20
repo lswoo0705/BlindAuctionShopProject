@@ -24,9 +24,9 @@ public class SellerService {
     private final PasswordEncoder passwordEncoder;
 
     // 나의 판매상품 등록
+    // productId, title, price, productDetail, bidderCnt
     @Transactional
     public void registerProduct(ProductRegisterRequest productRegisterRequest, String username) {
-        //1. username 받아온 애가 seller니?
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다")
         );
@@ -37,12 +37,9 @@ public class SellerService {
             Product product = new Product(user, title, price, productDetail);
             productRepository.save(product);
         } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 작성할 수 있습니다.");
-
-
-//        return new SellerProductResponse(product);
     }
 
-    // 나의 전체 판매상품 조회
+    // 나의 전체 판매상품 조회  // 페이징 필요
     @Transactional
     public List<SellerProductResponse> getSellerProductList() {
         List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
@@ -54,41 +51,61 @@ public class SellerService {
     }
 
     // 나의 개별 판매상품 조회  // bidderList 구현 안 됨
+    // title, price, productDetail, bidderList(username, nickname, msg, price)
     @Transactional
     public SellerProductDetailResponse getSellerProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new IllegalArgumentException("id가 존재하지 않습니다.")
+                () -> new IllegalArgumentException("판매글이 존재하지 않습니다.")
         );
+
+//        List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
+//        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();
+//
+//        for (Product product : products) {
+//            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionBy();
+//            List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
+//            User user = new User();  // ??
+//            for (PurchasePermission purchasePermission : purchasePermissions) {
+//                purchasePermissionResponses.add(new PurchasePermissionResponse(user,purchasePermission));
+//            }
+//            productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product));
+//        }
+//        return productPurchasePermissionResponses;
+
         return new SellerProductDetailResponse(product);
     }
 
     // 나의 판매상품 수정
     @Transactional
-    public void updateSellerProduct(Long productId, ProductUpdateRequest productUpdateRequest, User user) {
+    public void updateSellerProduct(Long productId, ProductUpdateRequest productUpdateRequest, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다")
+        );
+
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new IllegalArgumentException("게시물이 존재하지 않습니다.")
         );
 
-        if (product.getSeller().getId() != user.getId()) {
-            throw new IllegalArgumentException("판매자가 아닙니다.");
-        }
-
-        product.update(productUpdateRequest.getTitle(), productUpdateRequest.getPrice(), productUpdateRequest.getProductDetail());
-//        return new SellerProductResponse(product);
+        if (user.isSeller()){
+            product.update(user, productUpdateRequest.getTitle(), productUpdateRequest.getPrice(), productUpdateRequest.getProductDetail());
+        } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 수정할 수 있습니다.");
     }
 
     // 나의 판매상품 삭제
     @Transactional
-    public void deleteSellerProduct(Long productId, User user) {
+    public void deleteSellerProduct(Long productId, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다")
+        );
+
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new IllegalArgumentException("게시물이 존재하지 않습니다.")
         );
 
-        if (product.getSeller().getId() != user.getId()) {
-            throw new IllegalArgumentException("판매자가 아닙니다.");
-        }
+        if (user.isSeller()) {
+            productRepository.delete(product);
+        } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 삭제할 수 있습니다.");
 
-        productRepository.delete(product);
     }
 
     //나의 판매자 프로필 설정
@@ -110,7 +127,7 @@ public class SellerService {
         user.updateSellerProfile(sellerProfileUpdateRequest.getNickname(), sellerProfileUpdateRequest.getSellerDetail());
     }
 
-    // 전체상품 고객(구매)요청 목록 조회
+    // 전체상품 고객(구매)요청 목록 조회  // 페이징 필요
     @Transactional
     public List<ProductPurchasePermissionResponse> getPurchasePermissionList() {
         List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
