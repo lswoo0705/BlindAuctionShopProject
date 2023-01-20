@@ -88,15 +88,18 @@ public class UserController {
     // 판매자 등록 요청
     @PostMapping("/seller-permission")
     public ResponseEntity<StatusResponse> registerSellerPermission(@RequestBody SellerPermissionRegisterRequest
-                                                                           sellerPermissionRegisterRequest) {
+                                                                           sellerPermissionRegisterRequest,
+                                                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String phoneNum = sellerPermissionRegisterRequest.getPhoneNum();
         String permissionDetail = sellerPermissionRegisterRequest.getPermissionDetail();
+
+        String username = userDetails.getUsername();
 
         StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "판매자 등록 신청 완료");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-        userService.registerSellerPermission(phoneNum, permissionDetail);
+        userService.registerSellerPermission(phoneNum, permissionDetail, username);
 
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }
