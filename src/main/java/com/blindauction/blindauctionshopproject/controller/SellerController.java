@@ -47,7 +47,7 @@ public class SellerController {
 
     // 나의 개별 판매상품 조회
     @GetMapping("/sellers/products/{productId}")
-    public SellerProductDetailResponse getSellerProduct(@PathVariable Long productId) {
+    public List<SellerProductDetailResponse> getSellerProduct(@PathVariable Long productId) {
         return sellerService.getSellerProduct(productId);
     }
 

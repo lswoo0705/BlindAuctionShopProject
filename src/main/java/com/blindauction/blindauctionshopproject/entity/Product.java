@@ -28,14 +28,15 @@ public class Product extends TimeStamped{
     private String productDetail;
 
     @Column(nullable = false)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private int bidderCnt;
 
-    public Product(User seller, String title, Long price, String productDetail) {
+    public Product(User seller, String title, Long price, String productDetail, int bidderCnt) {
         this.seller = seller;
         this.title = title;
         this.price = price;
         this.productDetail = productDetail;
-        this.bidderCnt = 0;
+        this.bidderCnt = bidderCnt;
     }
 
 

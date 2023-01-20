@@ -13,12 +13,12 @@ public class PurchasePermission {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id; //구매신청 id
 
-    @JoinColumn(name = "title", nullable = false)  // 연관관계 다시 확인
-    @ManyToOne
+    @JoinColumn(nullable = false)  // 연관관계 다시 확인
+    @ManyToOne(fetch = FetchType.LAZY)
     private Product product; //원본 판매글
 
-    @JoinColumn(name = "nickname", nullable = false)  // 연관관계 다시 확인
-    @ManyToOne
+    @JoinColumn(nullable = false)  // 연관관계 다시 확인
+    @ManyToOne(fetch = FetchType.LAZY)
     private User bidder; //구매신청자
 
     @Column(nullable = false)

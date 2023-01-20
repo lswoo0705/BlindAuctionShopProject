@@ -33,8 +33,9 @@ public class SellerService {
         String title = productRegisterRequest.getTitle();
         Long price = productRegisterRequest.getPrice();
         String productDetail = productRegisterRequest.getProductDetail();
+        int bidderCnt = 0;
         if (user.isSeller()){
-            Product product = new Product(user, title, price, productDetail);
+            Product product = new Product(user, title, price, productDetail, bidderCnt);
             productRepository.save(product);
         } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 작성할 수 있습니다.");
     }
@@ -45,34 +46,33 @@ public class SellerService {
         List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
         List<SellerProductResponse> sellerProductResponses = new ArrayList<>();
         for (Product product : products) {
-            sellerProductResponses.add(new SellerProductResponse(product));
+            sellerProductResponses.add(new SellerProductResponse(product.getId(), product.getTitle(), product.getPrice(), product.getProductDetail(), product.getBidderCnt()));
         }
         return sellerProductResponses;
     }
 
-    // 나의 개별 판매상품 조회  // bidderList 구현 안 됨
-    // title, price, productDetail, bidderList(username, nickname, msg, price)
+    // 나의 개별 판매상품 조회
     @Transactional
-    public SellerProductDetailResponse getSellerProduct(Long productId) {
+    public List<SellerProductDetailResponse> getSellerProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new IllegalArgumentException("판매글이 존재하지 않습니다.")
-        );
+        );  // 이건 어떻게 사용해야하지,,
 
-//        List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
-//        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();
-//
-//        for (Product product : products) {
-//            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionBy();
-//            List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
-//            User user = new User();  // ??
-//            for (PurchasePermission purchasePermission : purchasePermissions) {
-//                purchasePermissionResponses.add(new PurchasePermissionResponse(user,purchasePermission));
-//            }
-//            productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product));
-//        }
-//        return productPurchasePermissionResponses;
+        List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
+        List<SellerProductDetailResponse> sellerProductDetailResponses = new ArrayList<>();
 
-        return new SellerProductDetailResponse(product);
+        for (Product product1 : products) {
+            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionBy();
+            List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
+
+            for (PurchasePermission purchasePermission : purchasePermissions) {
+                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
+            }
+
+            sellerProductDetailResponses.add(new SellerProductDetailResponse(product1.getTitle(), product1.getPrice(), product1.getProductDetail(), purchasePermissionResponses));
+        }
+
+        return sellerProductDetailResponses;
     }
 
     // 나의 판매상품 수정
@@ -131,16 +131,15 @@ public class SellerService {
     @Transactional
     public List<ProductPurchasePermissionResponse> getPurchasePermissionList() {
         List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
-        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();
+        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();  // 여기까진 나옴
 
         for (Product product : products) {
             List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionBy();
             List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
-            User user = new User();  // ??
             for (PurchasePermission purchasePermission : purchasePermissions) {
-                purchasePermissionResponses.add(new PurchasePermissionResponse(user,purchasePermission));
+                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
             }
-            productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product));
+            productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product.getId(), product.getTitle(), product.getPrice(), purchasePermissionResponses));
         }
         return productPurchasePermissionResponses;
     }
