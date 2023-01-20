@@ -18,21 +18,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 // 제네릭 타입<>으로 받으면 변수에따라 갈라쓸수있다.
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // 레퍼지토리에서 username 을 통해 유저를 가져온다
-        //1. userRepository 에서 username 을 찾아
-        if (userRepository.findByUsername(username).isPresent()) {
-            //1-2. userRepository 에 있으면, User user 객체를 생성해서 userDetailsImpl 에 넣어서 반납해
+        //1. username 으로 userRepository에서 user 찾아. 없으면 예외처리
             User user = userRepository.findByUsername(username).orElseThrow(
                     () -> new IllegalArgumentException("해당 username의 일반유저가 존재하지 않습니다")
             );
-            return new UserDetailsImpl(user);
+            return new UserDetailsImpl(user); // userDetailsImpl 반납
         }
-        //2. 1 에 없는경우, adminRepository 에서 username 을 찾아
+    // 관맂자인경우
+    public AdminUserDetailsImpl loadAdminUserByUsername(String username) throws UsernameNotFoundException{
         Admin admin = adminRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("해당 username의 관리자가 존재하지 않습니다") //3. 둘다 없는경우 예외처리
+                () -> new IllegalArgumentException("해당 username의 관리자가 존재하지 않습니다.")
         );
-        //2-1. adminRepository 에 있는경우 admin 객체를 생성해서 userDetailsImpl 에 담아서 반납해
         return new AdminUserDetailsImpl(admin);
-
     }
 
 

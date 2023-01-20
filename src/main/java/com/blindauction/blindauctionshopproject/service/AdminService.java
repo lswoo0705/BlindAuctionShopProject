@@ -3,7 +3,6 @@ package com.blindauction.blindauctionshopproject.service;
 
 import com.blindauction.blindauctionshopproject.dto.admin.*;
 
-import com.blindauction.blindauctionshopproject.dto.security.AdminUsernameAndRoleResponse;
 import com.blindauction.blindauctionshopproject.dto.security.UsernameAndRoleResponse;
 import com.blindauction.blindauctionshopproject.entity.*;
 
@@ -46,7 +45,7 @@ public class AdminService {
         if (!adminSignupRequest.getAdminToken().equals(ADMIN_TOKEN)) {
             throw new IllegalArgumentException("관리자 토큰이 일치하지 않습니다");
         }
-        AdminRoleEnum role = AdminRoleEnum.ADMIN;
+        UserRoleEnum role = UserRoleEnum.ADMIN;
 
         Admin admin = new Admin(username, nickname, password, role);
         adminRepository.save(admin);
@@ -145,7 +144,7 @@ public class AdminService {
     }
 
     //관리자 로그인
-    public AdminUsernameAndRoleResponse loginAdmin(AdminLoginRequest adminLoginRequest) {
+    public UsernameAndRoleResponse loginAdmin(AdminLoginRequest adminLoginRequest) {
         String username = adminLoginRequest.getUsername();
         String password = adminLoginRequest.getPassword();
 
@@ -155,6 +154,6 @@ public class AdminService {
         if (!passwordEncoder.matches(password, admin.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
         }
-        return new AdminUsernameAndRoleResponse(username, admin.getRole());
+        return new UsernameAndRoleResponse(username, admin.getRole());
     }
 }

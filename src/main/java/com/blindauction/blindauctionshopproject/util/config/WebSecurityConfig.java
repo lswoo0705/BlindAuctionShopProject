@@ -1,6 +1,5 @@
 package com.blindauction.blindauctionshopproject.util.config;
 
-import com.blindauction.blindauctionshopproject.repository.UserRepository;
 import com.blindauction.blindauctionshopproject.util.jwtUtil.JwtAuthFilter;
 import com.blindauction.blindauctionshopproject.util.jwtUtil.JwtUtil;
 import com.blindauction.blindauctionshopproject.util.security.UserDetailsServiceImpl;
@@ -23,7 +22,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity  // 스프링 세큐리티 기능 지원
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig {
-    private final JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil; // jwt를 사용하기 위해서 객체 생성
+
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -49,8 +50,17 @@ public class WebSecurityConfig {
                 .antMatchers("/users/login").permitAll()
                 .antMatchers("/admin/signup").permitAll()
                 .antMatchers("/admin/login").permitAll()
+
+                .antMatchers("/admin/**").hasAnyRole("ADMIN")
+
+                .antMatchers("/users/**").hasAnyRole("USER","SELLER")
+                .antMatchers("/sellers/**").hasAnyRole("SELLER")
+
+                .antMatchers("/product/**").hasAnyRole("USER")
+
                 .anyRequest().authenticated()
-                .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class); // jwtAuthFilter( 내부값 ) 작성 필요
+                //이하 jwt 를 인증&인가에 사용하기 위한 설정임.
+                .and().addFilterBefore(new JwtAuthFilter(jwtUtil,userDetailsService), UsernamePasswordAuthenticationFilter.class); // jwtAuthFilter( 내부값 ) 작성 필요
 
         return http.build();
     }

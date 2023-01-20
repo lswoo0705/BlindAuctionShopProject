@@ -1,8 +1,8 @@
 package com.blindauction.blindauctionshopproject.controller;
 
 import com.blindauction.blindauctionshopproject.dto.admin.*;
-import com.blindauction.blindauctionshopproject.dto.security.AdminUsernameAndRoleResponse;
 import com.blindauction.blindauctionshopproject.dto.security.StatusResponse;
+import com.blindauction.blindauctionshopproject.dto.security.UsernameAndRoleResponse;
 import com.blindauction.blindauctionshopproject.service.AdminService;
 import com.blindauction.blindauctionshopproject.util.jwtUtil.JwtUtil;
 import com.blindauction.blindauctionshopproject.util.security.UserDetailsImpl;
@@ -69,8 +69,8 @@ public class AdminController {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "관리자 로그인 완료");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        AdminUsernameAndRoleResponse adminUsernameAndRoleResponse = adminService.loginAdmin(adminLoginRequest);
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER,jwtUtil.createAdminToken(adminUsernameAndRoleResponse.getUsername(), adminUsernameAndRoleResponse.getRole())); // 헤더에 jwt 인증 토큰 담음
+        UsernameAndRoleResponse adminUsernameAndRoleResponse = adminService.loginAdmin(adminLoginRequest);
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER,jwtUtil.createToken(adminUsernameAndRoleResponse.getUsername(), adminUsernameAndRoleResponse.getRole())); // 헤더에 jwt 인증 토큰 담음
 
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK); // http 상태 정보, jwt 토큰이 담긴 헤더 를 리턴함
     }

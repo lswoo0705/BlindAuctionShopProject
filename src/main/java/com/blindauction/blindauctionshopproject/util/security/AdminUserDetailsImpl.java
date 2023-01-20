@@ -1,7 +1,7 @@
 package com.blindauction.blindauctionshopproject.util.security;
 
 import com.blindauction.blindauctionshopproject.entity.Admin;
-import com.blindauction.blindauctionshopproject.entity.AdminRoleEnum;
+import com.blindauction.blindauctionshopproject.entity.UserRoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,11 +17,11 @@ public class AdminUserDetailsImpl implements UserDetails  {
         this.admin = admin;
     }
 
-    public Admin getAdminUser() { return admin;}
+    public Admin getUser() { return admin;}
 
     public Collection<? extends GrantedAuthority> getAuthorities(){ // GrantedAuthority : 인증개쳉 부여된 권한. 권한 자체를 String으로 출력해주거나, AccessDecisionManager의 특별 서포트를 받음.
         // 즉, 이 메소드는 Authority를 받은 Collection에 소속된 어떤 객체든 뱉어낸다는 뜻인듯.
-        AdminRoleEnum role = admin.getRole(); // 유저의 역할 꺼냄
+        UserRoleEnum role = admin.getRole(); // 유저의 역할 꺼냄
         String authority = role.getAuthority(); //
 
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority); //SimpleGrantedAuthority : 인증개체에 부여된 권한의 문자열 표현을 저장
