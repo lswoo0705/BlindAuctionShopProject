@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity(name="SELLER_PERMISSION")
-public class SellerPermission {
+public class SellerPermission extends TimeStamped{
     @Id
     private long id; // 판매글 id
 
@@ -22,4 +22,5 @@ public class SellerPermission {
         this.phoneNum = phoneNum;
         this.permissionDetail = permissionDetail;
     }
+
 }
