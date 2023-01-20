@@ -24,10 +24,10 @@ public class Admin {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private AdminRoleEnum role;
+    private UserRoleEnum role;
 
         //생성자
-        public Admin (String username, String nickname, String password, AdminRoleEnum role){
+        public Admin (String username, String nickname, String password, UserRoleEnum role){
                 this.username = username;
                 this.nickname = nickname;
                 this.password = password;
