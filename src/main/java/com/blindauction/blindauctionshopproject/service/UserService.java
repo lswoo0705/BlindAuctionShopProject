@@ -54,9 +54,12 @@ public class UserService {
     }
 
     // 판매자 등록 요청
-    public void registerSellerPermission(String phoneNum, String permissionDetail) {
-        SellerPermission sellerPermission = new SellerPermission(phoneNum, permissionDetail);
-        sellerPermissionRepository.save(sellerPermission);
+    public void registerSellerPermission(String phoneNum, String permissionDetail, String username) {
+//        //1. username 의 유저가 있는지 생성하고
+//        SellerPermission sellerPermission = new SellerPermission(phoneNum, permissionDetail);
+//        sellerPermissionRepository.save(sellerPermission);
+
+        //2. SellerPermission객체를 생성후 레퍼지토리 넣기 (1. phonnum, permissiondetail,
     }
 
     //유저 회원가입
