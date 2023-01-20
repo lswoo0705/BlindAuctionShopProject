@@ -57,8 +57,8 @@ public class AdminController {
     }
 
     @PutMapping("/role/{userId}") // 판매자 권한 승인
-    public ResponseEntity<StatusResponse> acceptSellerRole(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long userId) {
-        adminService.acceptSellerRole(userId, userDetails.getUser());
+    public ResponseEntity<StatusResponse> acceptSellerRole(@PathVariable Long userId) {
+        adminService.acceptSellerRole(userId);
         return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "권한 승인"));
     }
 

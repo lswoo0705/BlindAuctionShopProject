@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.SELLER;
+import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.USER;
 
 @Getter
 @NoArgsConstructor
@@ -58,8 +59,20 @@ public class User {
     public boolean isSeller(){ //User 가 Seller 인지 확인해주는 메소드
         return this.getRole().equals(SELLER);
     }
+    public boolean isUser(){
+        return this.getRole().equals(USER);
+    }
+
     public void updateSellerProfile(String nickname, String sellerDetail){
         this.nickname = nickname;
         this.sellerDetail = sellerDetail;
+    }
+
+    public void updateUserToSeller() {
+        UserRoleEnum sellerrole = SELLER;
+        this.role = sellerrole;
+    }
+    public void updateUserPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
     }
 }
