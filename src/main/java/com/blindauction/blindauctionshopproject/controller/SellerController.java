@@ -26,6 +26,8 @@ import java.util.List;
 public class SellerController {
     private final SellerService sellerService;
 
+    // 조회는 굳이 유저네임을 확인할 필요가 없으니까  (@AuthenticationPrincipal UserDetailsImpl userDetails) 파라미터를 안 받아도 됨, 나머지는 받아야만
+
     // 나의 판매상품 등록
     @PostMapping("/sellers/products")
     public ResponseEntity<StatusResponse> registerProduct(@RequestBody ProductRegisterRequest productRegisterRequest) {
@@ -85,11 +87,15 @@ public class SellerController {
         return sellerService.getPurchasePermissionList();
     }
 
-    // 고객(거래)요청 수락&완료  // 작업중
+    // 고객(거래)요청 수락&완료  // 작업중 // 수락 or 거부를 여기서 판별?
     @PutMapping("/sellers/purchase-permission/{permissionId}")
-    public ResponseEntity<StatusResponse> updatePurchasePermission(@PathVariable Long permissionId, @RequestBody PurchasePermissionUpdateRequest purchasePermissionUpdateRequest, User username) {
-        sellerService.updatePurchasePermission(permissionId, purchasePermissionUpdateRequest, username);
-        return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "구매 요청 허락"));
+    public ResponseEntity<StatusResponse> updatePurchasePermission(@PathVariable Long permissionId, @RequestBody PurchasePermissionUpdateRequest purchasePermissionUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 //        return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "구매 요청 거부"));
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "구매 요청 허락");
+        HttpHeaders headers = new HttpHeaders();
+        String username = userDetails.getUsername();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        sellerService.updatePurchasePermission(permissionId, purchasePermissionUpdateRequest, username);
+        return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }
 }

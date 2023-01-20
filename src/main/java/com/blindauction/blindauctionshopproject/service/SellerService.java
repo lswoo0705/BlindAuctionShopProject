@@ -119,23 +119,22 @@ public class SellerService {
 
     // 고객(거래)요청 수락&완료  // 작업중
     @Transactional
-    public void updatePurchasePermission(Long permissionId, PurchasePermissionUpdateRequest purchasePermissionUpdateRequest, User username) {
+    public void updatePurchasePermission(Long permissionId, PurchasePermissionUpdateRequest purchasePermissionUpdateRequest, String username) {
         PurchasePermission purchasePermission = purchasePermissionRepository.findById(permissionId).orElseThrow(
                 () -> new IllegalArgumentException("구매 요청이 존재하지 않습니다.")
         );
         //판매자 확인
-        if (!purchasePermission.getProduct().getSeller().equals(username)) {
+        if (!purchasePermission.getProduct().getSeller().getUsername().equals(username)) {
             throw new IllegalArgumentException("상품의 판매자만 수정할 수 있습니다.");
         }
-        // 대기상태인지 먼저 확인, 대기가 아닐 경우 수락이나 거부상태 -> 이미 처리된 거래 요청입니다
+        // 대기상태인지 먼저 확인
         if (!purchasePermission.getTransactionStatus().equals(TransactionStatusEnum.WAITING)) { // 수락 or 거부 //수락일경우 예외처리
             throw new IllegalArgumentException("이미 처리된 거래 요청입니다.");
         }
-        // 대기인 경우 수락이나 거부를 넣을 수 잇음
-        // 수락이나 거부를 넣는 기준은?
+        // 대기인 경우 수락이나 거부를 넣을 수 잇음 <- controller 에서
         // if (조건) { purchasePermission.update(purchasePermissionUpdateRequest.getTransactionStatus()); }  // REFUSAL
         // 그후에 수락
         // 수락
-        purchasePermission.update(purchasePermissionUpdateRequest.getTransactionStatus());  // ACCEPTANCE
+//        purchasePermission.update(purchasePermissionUpdateRequest.getTransactionStatus());  // ACCEPTANCE
     }
 }
