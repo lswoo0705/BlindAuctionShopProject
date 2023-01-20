@@ -58,6 +58,16 @@ public class SellerController {
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
 
+    // 나의 판매상품 삭제
+    @DeleteMapping("/sellers/products/{productId}")
+    public ResponseEntity<StatusResponse> deleteSellerProduct(@PathVariable Long productId, @RequestBody User user) {
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "상품 삭제 완료");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        sellerService.deleteSellerProduct(productId, user);
+        return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
+    }
+
     //나의 판매자 프로필 설정
     @PutMapping("/sellers/profile")
     public ResponseEntity<StatusResponse> getSellerProfile(@RequestBody SellerProfileUpdateRequest sellerProfileUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -67,5 +77,19 @@ public class SellerController {
         sellerService.getSellerProfile(sellerProfileUpdateRequest, username);
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
+    }
+
+    // 전체상품 고객(구매)요청 목록 조회
+    @GetMapping("/sellers/purchase-permission")
+    public List<ProductPurchasePermissionResponse> getPurchasePermissionList() {
+        return sellerService.getPurchasePermissionList();
+    }
+
+    // 고객(거래)요청 수락&완료  // 작업중
+    @PutMapping("/sellers/purchase-permission/{permissionId}")
+    public ResponseEntity<StatusResponse> updatePurchasePermission(@PathVariable Long permissionId, @RequestBody PurchasePermissionUpdateRequest purchasePermissionUpdateRequest, User username) {
+        sellerService.updatePurchasePermission(permissionId, purchasePermissionUpdateRequest, username);
+        return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "구매 요청 허락"));
+//        return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "구매 요청 거부"));
     }
 }
