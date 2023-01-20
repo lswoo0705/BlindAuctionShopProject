@@ -34,4 +34,14 @@ public class PurchasePermission {
     public PurchasePermission(TransactionStatusEnum transactionStatus) {
         this.transactionStatus = transactionStatus;
     }
+
+    public void update(TransactionStatusEnum transactionStatus) {
+        this.transactionStatus = transactionStatus;
+    }
+//    public boolean isPermissionWaiting() {
+//        return this.getTransactionStatus().equals(TransactionStatusEnum.WAITING);
+//    }
+//    public boolean isPermissionAccept() {
+//        return this.getTransactionStatus().
+//    }
 }
