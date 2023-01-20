@@ -30,11 +30,12 @@ public class SellerController {
 
     // 나의 판매상품 등록
     @PostMapping("/sellers/products")
-    public ResponseEntity<StatusResponse> registerProduct(@RequestBody ProductRegisterRequest productRegisterRequest) {
+    public ResponseEntity<StatusResponse> registerProduct(@RequestBody ProductRegisterRequest productRegisterRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "등록 완료");
+        String username = userDetails.getUsername();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        sellerService.registerProduct(productRegisterRequest);
+        sellerService.registerProduct(productRegisterRequest, username);
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
 

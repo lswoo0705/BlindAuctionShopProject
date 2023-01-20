@@ -25,9 +25,20 @@ public class SellerService {
 
     // 나의 판매상품 등록
     @Transactional
-    public void registerProduct(ProductRegisterRequest productRegisterRequest) {
-        Product product = new Product(productRegisterRequest.getTitle(), productRegisterRequest.getPrice(), productRegisterRequest.getProductDetail());
-        productRepository.save(product);
+    public void registerProduct(ProductRegisterRequest productRegisterRequest, String username) {
+        //1. username 받아온 애가 seller니?
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다")
+        );
+        String title = productRegisterRequest.getTitle();
+        Long price = productRegisterRequest.getPrice();
+        String productDetail = productRegisterRequest.getProductDetail();
+        if (user.isSeller()){
+            Product product = new Product(user, title, price, productDetail);
+            productRepository.save(product);
+        } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 작성할 수 있습니다.");
+
+
 //        return new SellerProductResponse(product);
     }
 
