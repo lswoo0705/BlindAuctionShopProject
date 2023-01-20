@@ -103,8 +103,8 @@ public class UserController {
 
     // 판매자 목록 조회
     @GetMapping("/sellers-list")
-    public Page<SellerResponse> getSellerList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.getSellerList(userDetails.getUser().getId());
+    public Page<SellerResponse> getSellerList() {
+        return userService.getSellerList();
     }
 
     // 판매자 개별 조회

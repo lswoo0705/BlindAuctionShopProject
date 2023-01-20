@@ -55,14 +55,14 @@ public class AdminService {
     }
 
     @Transactional // 회원목록 조회
-    public Page<UserResponse> getUserList(Long userId) {
-        return userRepository.findAllByOrderByIdDesc(userId, USER, PageRequest.of(10, 10)).map(UserResponse::new);
+    public Page<UserResponse> getUserList() {
+        return userRepository.findAllByRole(USER, PageRequest.of(10, 10)).map(UserResponse::new);
         // (클래스 :: 메서드)
     }
 
     @Transactional
-    public Page<SellerDetailResponse> getSellerList(Long userId) { // 판매자목록 조회
-        return userRepository.findAllByOrderByIdDesc(userId, SELLER, PageRequest.of(10, 10))
+    public Page<SellerDetailResponse> getSellerList() { // 판매자목록 조회
+        return userRepository.findAllByRole(SELLER, PageRequest.of(10, 10))
                 .map(user -> new SellerDetailResponse(user.getUsername(), user.getNickname(), user.getPhoneNum(), user.getSellerDetail()));
     }
 
