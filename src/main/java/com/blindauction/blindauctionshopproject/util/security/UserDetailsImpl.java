@@ -1,5 +1,6 @@
 package com.blindauction.blindauctionshopproject.util.security;
 
+
 import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.entity.UserRoleEnum;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,22 +10,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class UserDetailsImpl implements UserDetails  {
+public class UserDetailsImpl implements UserDetails {
     private final User user;
 
-    //생성자
-    public UserDetailsImpl(User user){
+    public UserDetailsImpl(User user) {
         this.user = user;
     }
 
-    public User getUser() { return user;}
+    public User getUser() {
+        return user;
+    }
 
-    public Collection<? extends GrantedAuthority> getAuthorities(){ // GrantedAuthority : 인증개쳉 부여된 권한. 권한 자체를 String으로 출력해주거나, AccessDecisionManager의 특별 서포트를 받음.
-        // 즉, 이 메소드는 Authority를 받은 Collection에 소속된 어떤 객체든 뱉어낸다는 뜻인듯.
-        UserRoleEnum role = user.getRole(); // 유저의 역할 꺼냄
-        String authority = role.getAuthority(); //
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        UserRoleEnum role = user.getRole();
+        String authority = role.getAuthority();
 
-        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority); //SimpleGrantedAuthority : 인증개체에 부여된 권한의 문자열 표현을 저장
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(simpleGrantedAuthority);
 
@@ -32,15 +34,14 @@ public class UserDetailsImpl implements UserDetails  {
     }
 
     @Override
-    public String getUsername() { // 구분자 역할을 하는 아이가 들어가는거임
-        return this.user.getUsername();
+    public String getPassword() {
+        return this.user.getPassword();
     }
 
     @Override
-    public String getPassword() {
-        return null; // 비밀번호는 주면 안되는데.. 일단 null
+    public String getUsername() {
+        return this.user.getUsername();
     }
-
 
     @Override
     public boolean isAccountNonExpired() {
@@ -61,5 +62,4 @@ public class UserDetailsImpl implements UserDetails  {
     public boolean isEnabled() {
         return false;
     }
-
 }

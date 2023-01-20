@@ -68,7 +68,7 @@ public class SellerController {
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
 
-    //나의 판매자 프로필 설정
+    //나의 판매자 프로필 수정
     @PutMapping("/sellers/profile")
     public ResponseEntity<StatusResponse> getSellerProfile(@RequestBody SellerProfileUpdateRequest sellerProfileUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
         StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "프로필 수정 완료");
@@ -87,7 +87,8 @@ public class SellerController {
 
     // 고객(거래)요청 수락&완료  // 작업중
     @PutMapping("/sellers/purchase-permission/{permissionId}")
-    public ResponseEntity<StatusResponse> updatePurchasePermission(@PathVariable Long permissionId, @RequestBody PurchasePermissionUpdateRequest purchasePermissionUpdateRequest, User username) {
+    public ResponseEntity<StatusResponse> updatePurchasePermission(@PathVariable Long permissionId, @RequestBody PurchasePermissionUpdateRequest purchasePermissionUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String username = userDetails.getUsername();
         sellerService.updatePurchasePermission(permissionId, purchasePermissionUpdateRequest, username);
         return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "구매 요청 허락"));
 //        return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "구매 요청 거부"));

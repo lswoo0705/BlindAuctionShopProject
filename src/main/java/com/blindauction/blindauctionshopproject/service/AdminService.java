@@ -9,8 +9,6 @@ import com.blindauction.blindauctionshopproject.dto.admin.SellerPermissionRespon
 import com.blindauction.blindauctionshopproject.dto.admin.UserResponse;
 import com.blindauction.blindauctionshopproject.entity.*;
 
-import com.blindauction.blindauctionshopproject.repository.AdminRepository;
-
 import com.blindauction.blindauctionshopproject.repository.SellerPermissionRepository;
 import com.blindauction.blindauctionshopproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +26,8 @@ import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.USER;
 @Service
 @RequiredArgsConstructor
 public class AdminService {
-    private UserRepository userRepository;
-    private final AdminRepository adminRepository;
-
-    private SellerPermissionRepository sellerPermissionRepository;
+    private final UserRepository userRepository;
+    private final SellerPermissionRepository sellerPermissionRepository;
     private final PasswordEncoder passwordEncoder;
     private static final String ADMIN_TOKEN = "eyJzdWIiOiJoZWxsb3dvcmxkIiwibm";
 
@@ -41,7 +37,7 @@ public class AdminService {
         String nickname = adminSignupRequest.getNickname();
         String password = passwordEncoder.encode(adminSignupRequest.getPassword());
 
-        Optional<Admin> found = adminRepository.findByUsername(username);
+        Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()) {
             throw new IllegalArgumentException("중복된 관리자 아이디가 존재합니다.");
         }
@@ -50,8 +46,8 @@ public class AdminService {
         }
         UserRoleEnum role = UserRoleEnum.ADMIN;
 
-        Admin admin = new Admin(username, nickname, password, role);
-        adminRepository.save(admin);
+        User user = new User(username, nickname, password, role);
+        userRepository.save(user);
     }
 
     @Transactional // 회원목록 조회
@@ -111,12 +107,12 @@ public class AdminService {
         String username = adminLoginRequest.getUsername();
         String password = adminLoginRequest.getPassword();
 
-        Admin admin = adminRepository.findByUsername(username).orElseThrow(
+        User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 id 는 존재하지 않습니다.")
         );
-        if (!passwordEncoder.matches(password, admin.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
         }
-        return new UsernameAndRoleResponse(username, admin.getRole());
+        return new UsernameAndRoleResponse(user.getUsername(), user.getRole());
     }
 }

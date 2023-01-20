@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class PurchasePermissionUpdateRequest {
+    //accept or afusal 이거아님 안됨.
     private final TransactionStatusEnum transactionStatus;
 
     public PurchasePermissionUpdateRequest(TransactionStatusEnum transactionStatus) {
