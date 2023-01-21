@@ -28,7 +28,7 @@ public class SellerController {
 
     // 조회는 굳이 유저네임을 확인할 필요가 없으니까  (@AuthenticationPrincipal UserDetailsImpl userDetails) 파라미터를 안 받아도 됨, 나머지는 받아야만
 
-    // 나의 판매상품 등록
+    // 나의 판매상품 등록 [확인ㅇ]
     @PostMapping("/sellers/products")
     public ResponseEntity<StatusResponse> registerProduct(@RequestBody ProductRegisterRequest productRegisterRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "등록 완료");
@@ -39,10 +39,10 @@ public class SellerController {
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
 
-    // 나의 전체 판매상품 조회
+    // 나의 전체 판매상품 조회 // 페이징 필요
     @GetMapping("/sellers/products/list")
-    public List<SellerProductResponse> getSellerProductList() {
-        return sellerService.getSellerProductList();
+    public List<SellerProductResponse> getSellerProductList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return sellerService.getSellerProductList(userDetails);
     }
 
     // 나의 개별 판매상품 조회
@@ -51,7 +51,7 @@ public class SellerController {
         return sellerService.getSellerProduct(productId);
     }
 
-    // 나의 판매상품 수정
+    // 나의 판매상품 수정 [확인ㅇ]
     @PutMapping("/sellers/products/{productId}")
     public ResponseEntity<StatusResponse> updateSellerProduct(@PathVariable Long productId, @RequestBody ProductUpdateRequest productUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "수정 완료");
@@ -62,7 +62,7 @@ public class SellerController {
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
 
-    // 나의 판매상품 삭제
+    // 나의 판매상품 삭제  // password 확인 필요
     @DeleteMapping("/sellers/products/{productId}")
     public ResponseEntity<StatusResponse> deleteSellerProduct(@PathVariable Long productId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "상품 삭제 완료");

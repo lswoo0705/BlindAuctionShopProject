@@ -6,6 +6,7 @@ import com.blindauction.blindauctionshopproject.repository.ProductRepository;
 import com.blindauction.blindauctionshopproject.repository.UserRepository;
 import com.blindauction.blindauctionshopproject.repository.PurchasePermissionRepository;
 
+import com.blindauction.blindauctionshopproject.util.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,10 @@ import java.util.List;
 public class SellerService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-
     private final PurchasePermissionRepository purchasePermissionRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // 나의 판매상품 등록
-    // productId, title, price, productDetail, bidderCnt
+    // 나의 판매상품 등록 [확인ㅇ] // 권한 상관없이 등록됨
     @Transactional
     public void registerProduct(ProductRegisterRequest productRegisterRequest, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -40,25 +39,39 @@ public class SellerService {
         } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 작성할 수 있습니다.");
     }
 
-    // 나의 전체 판매상품 조회  // 페이징 필요
+    // 나의 전체 판매상품 조회 // 페이징 필요 // 권한 상관없이 조회됨
     @Transactional
-    public List<SellerProductResponse> getSellerProductList() {
-        List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
+    public List<SellerProductResponse> getSellerProductList(UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        if (!user.isSeller()) {
+            throw new IllegalArgumentException("판매자만 조회할 수 있습니다.");
+        }
+        List<Product> products = productRepository.findAllBySeller(user);
+//        List<Product> products = productRepository.findAllByOrderByModifiedAt();
         List<SellerProductResponse> sellerProductResponses = new ArrayList<>();
         for (Product product : products) {
-            sellerProductResponses.add(new SellerProductResponse(product.getId(), product.getTitle(), product.getPrice(), product.getProductDetail(), product.getBidderCnt()));
+            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionBy();
+            List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
+            for (PurchasePermission purchasePermission : purchasePermissions) {
+                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
+            }
+            int bidderCnt = purchasePermissionResponses.size();
+            sellerProductResponses.add(new SellerProductResponse(product.getId(), product.getTitle(), product.getPrice(), product.getProductDetail(), bidderCnt));
         }
         return sellerProductResponses;
     }
 
-    // 나의 개별 판매상품 조회
+    // 나의 개별 판매상품 조회  // bidderList에서 username이 없음 // 권한 상관없이 조회됨
     @Transactional
     public List<SellerProductDetailResponse> getSellerProduct(Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow(
-                () -> new IllegalArgumentException("판매글이 존재하지 않습니다.")
-        );  // 이건 어떻게 사용해야하지,,
+//        User user = userDetails.getUser();
+//        List<Product> product = productRepository.findAllBySeller(user.getId());
 
-        List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
+//        Product product = productRepository.findById(productId).orElseThrow(
+//                () -> new IllegalArgumentException("판매글이 존재하지 않습니다.")
+//        );
+
+        List<Product> products = productRepository.findProductById(productId);
         List<SellerProductDetailResponse> sellerProductDetailResponses = new ArrayList<>();
 
         for (Product product1 : products) {
@@ -75,7 +88,7 @@ public class SellerService {
         return sellerProductDetailResponses;
     }
 
-    // 나의 판매상품 수정
+    // 나의 판매상품 수정 [확인ㅇ] // 권한 상관없이 수정됨
     @Transactional
     public void updateSellerProduct(Long productId, ProductUpdateRequest productUpdateRequest, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -91,7 +104,7 @@ public class SellerService {
         } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 수정할 수 있습니다.");
     }
 
-    // 나의 판매상품 삭제
+    // 나의 판매상품 삭제  // password 확인 필요 // 권한 상관없이 삭제됨
     @Transactional
     public void deleteSellerProduct(Long productId, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -127,11 +140,11 @@ public class SellerService {
         user.updateSellerProfile(sellerProfileUpdateRequest.getNickname(), sellerProfileUpdateRequest.getSellerDetail());
     }
 
-    // 전체상품 고객(구매)요청 목록 조회  // 페이징 필요
+    // 전체상품 고객(구매)요청 목록 조회  // 페이징 필요  // bidderList에서 username이 없음 // 권한 상관없이 조회됨
     @Transactional
     public List<ProductPurchasePermissionResponse> getPurchasePermissionList() {
-        List<Product> products = productRepository.findAllByOrderByModifiedAtDesc();
-        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();  // 여기까진 나옴
+        List<Product> products = productRepository.findAllByOrderByModifiedAt();
+        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();
 
         for (Product product : products) {
             List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionBy();

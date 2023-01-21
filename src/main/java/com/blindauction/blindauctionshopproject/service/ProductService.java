@@ -43,7 +43,7 @@ public class ProductService {
         return new ProductDetailResponse(product);
     }
 
-    // 판매자에게 구입 요청
+    // 판매자에게 구입 요청 // 권한 상관없이 요청됨
     @Transactional
     public void sendPurchasePermission(String msg, Long price, String username, Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
