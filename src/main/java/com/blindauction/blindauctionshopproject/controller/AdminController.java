@@ -56,9 +56,9 @@ public class AdminController {
         return adminService.getSellerPermissionList();
     }
 
-    @PutMapping("/role/{userId}") // 판매자 권한 승인
-    public ResponseEntity<StatusResponse> acceptSellerRole(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long userId) {
-        adminService.acceptSellerRole(userId, userDetails.getUser());
+    @PutMapping("/role/{userId}") // 판매자 권한 승인 [확인ㅇ]
+    public ResponseEntity<StatusResponse> acceptSellerRole(@PathVariable Long userId) {
+        adminService.acceptSellerRole(userId);
         return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "권한 승인"));
     }
 
@@ -81,7 +81,7 @@ public class AdminController {
     }
 
     //관리자 로그아웃
-    @PostMapping("/logout")
+    @PostMapping("/logout") // 로그인 토큰 (프론트) : 쿠키나 기타 장소에 프론트가 들고있음. 인증이 필요한 기능쓸때마다 쿠키에서 토큰 꺼내옴. 서버 : 프론트한테 쿠키를 삭제하게끔... 프론트 : 쿠키안에 있던 토큰이 사라져서 인가가 안됨! (2.이외에 redis 방법 있음) 1. 리프레시토큰쓰는방법.
     public ResponseEntity<StatusResponse> logoutAdmin(HttpServletResponse response) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "로그아웃 완료");
         HttpHeaders headers = new HttpHeaders();

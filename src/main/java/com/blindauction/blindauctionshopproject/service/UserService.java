@@ -41,6 +41,7 @@ public class UserService {
     }
 
     // 나의 프로필 설정(수정)
+    @Transactional
     public void updateUserProfile(String nickname, String password, String userInfo) {
         User user = userRepository.findByUsername(userInfo).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")
@@ -49,13 +50,18 @@ public class UserService {
         if (user.getUsername().equals(userInfo)) {
             if (passwordEncoder.matches(password, user.getPassword())) {
                 user.updateUserProfile(nickname);
-            } throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        } throw new IllegalArgumentException("본인의 프로필만 설정할 수 있습니다.");
+            } else throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        } else throw new IllegalArgumentException("본인의 프로필만 설정할 수 있습니다.");
     }
 
     // 판매자 등록 요청
-    public void registerSellerPermission(String phoneNum, String permissionDetail) {
-        SellerPermission sellerPermission = new SellerPermission(phoneNum, permissionDetail);
+    @Transactional
+    public void registerSellerPermission(String phoneNum, String permissionDetail, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")
+        );
+
+        SellerPermission sellerPermission = new SellerPermission(user, phoneNum, permissionDetail);
         sellerPermissionRepository.save(sellerPermission);
     }
 
