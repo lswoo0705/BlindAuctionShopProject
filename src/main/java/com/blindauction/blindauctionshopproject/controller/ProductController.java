@@ -26,7 +26,7 @@ public class ProductController {
     // 전체 판매상품 목록 조회
     @GetMapping("/list")
     public Page<ProductResponse> getProductList(@RequestParam int page) {
-        return productService.getProductList(page);
+        return productService.getProductList(page - 1);
     }
 
     // 개별 판매상품 상세 조회
