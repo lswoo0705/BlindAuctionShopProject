@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -28,15 +30,18 @@ public class Product extends TimeStamped{
     private String productDetail;
 
     @Column(nullable = false)
-//    @GeneratedValue(strategy = GenerationType.AUTO)
     private int bidderCnt;
 
-    public Product(User seller, String title, Long price, String productDetail, int bidderCnt) {
+    public Product(User seller, String title, Long price, String productDetail) {
         this.seller = seller;
         this.title = title;
         this.price = price;
         this.productDetail = productDetail;
-        this.bidderCnt = bidderCnt;
+        this.bidderCnt = 0;
+    }
+
+    public void plusBidderCnt(){
+        this.bidderCnt += 1;
     }
 
 

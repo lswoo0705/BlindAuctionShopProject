@@ -40,7 +40,7 @@ public class BlindauctionshopprojectApplication {
             userRepository.save(user);
 
             // seller 가 작성한 판매글 생성 & 레퍼지토리 저장
-            Product product = new Product(seller, "인형 팝니다", (long)30000, "춘식이 인형 팝니다", 0);
+            Product product = new Product(seller, "인형 팝니다", (long)30000, "춘식이 인형 팝니다");
             productRepository.save(product);
 
             // user 가 작성한 거래요청글 생성 & 레퍼지토리 저장

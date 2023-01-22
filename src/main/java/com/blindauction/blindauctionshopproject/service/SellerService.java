@@ -32,9 +32,8 @@ public class SellerService {
         String title = productRegisterRequest.getTitle();
         Long price = productRegisterRequest.getPrice();
         String productDetail = productRegisterRequest.getProductDetail();
-        int bidderCnt = 0;
         if (user.isSeller()) {
-            Product product = new Product(user, title, price, productDetail, bidderCnt);
+            Product product = new Product(user, title, price, productDetail);
             productRepository.save(product);
         } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 작성할 수 있습니다.");
     }
@@ -47,10 +46,9 @@ public class SellerService {
             throw new IllegalArgumentException("판매자만 조회할 수 있습니다.");
         }
         List<Product> products = productRepository.findAllBySeller(user);
-//        List<Product> products = productRepository.findAllByOrderByModifiedAt();
         List<SellerProductResponse> sellerProductResponses = new ArrayList<>();
         for (Product product : products) {
-            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionBy();
+            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionByProduct(product);
             List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
             for (PurchasePermission purchasePermission : purchasePermissions) {
                 purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
@@ -64,18 +62,11 @@ public class SellerService {
     // 나의 개별 판매상품 조회  // bidderList에서 username이 없음 // 권한 상관없이 조회됨
     @Transactional
     public List<SellerProductDetailResponse> getSellerProduct(Long productId) {
-//        User user = userDetails.getUser();
-//        List<Product> product = productRepository.findAllBySeller(user.getId());
-
-//        Product product = productRepository.findById(productId).orElseThrow(
-//                () -> new IllegalArgumentException("판매글이 존재하지 않습니다.")
-//        );
-
         List<Product> products = productRepository.findProductById(productId);
         List<SellerProductDetailResponse> sellerProductDetailResponses = new ArrayList<>();
 
         for (Product product1 : products) {
-            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionBy();
+            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionByProduct(product1);
             List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
 
             for (PurchasePermission purchasePermission : purchasePermissions) {
@@ -164,7 +155,7 @@ public class SellerService {
         List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();
 
         for (Product product : products) {
-            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionBy();
+            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionByProduct(product);
             List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
             for (PurchasePermission purchasePermission : purchasePermissions) {
                 purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
