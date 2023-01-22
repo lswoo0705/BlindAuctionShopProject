@@ -11,6 +11,7 @@ import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.service.SellerService;
 import com.blindauction.blindauctionshopproject.util.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -92,8 +93,9 @@ public class SellerController {
 
     // 전체상품 고객(구매)요청 목록 조회
     @GetMapping("/sellers/purchase-permission")
-    public List<ProductPurchasePermissionResponse> getPurchasePermissionList() {
-        return sellerService.getPurchasePermissionList();
+    public Page<ProductPurchasePermissionResponse> getPurchasePermissionList(@AuthenticationPrincipal UserDetailsImpl userDetails, int page) {
+        String username = userDetails.getUsername();
+        return sellerService.getPurchasePermissionList(username, page);
     }
 
     // 고객(거래)요청 수락&완료  // 작업중 // 수락 or 거부를 여기서 판별?

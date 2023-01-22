@@ -8,6 +8,7 @@ import com.blindauction.blindauctionshopproject.repository.PurchasePermissionRep
 
 import com.blindauction.blindauctionshopproject.util.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,7 +96,7 @@ public class SellerService {
         } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 수정할 수 있습니다.");
     }
 
-    // 나의 판매상품 삭제  // password 확인 필요 // 권한 상관없이 삭제됨
+    // 나의 판매상품 삭제
     @Transactional
     public void deleteSellerProduct(Long productId, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -106,7 +107,7 @@ public class SellerService {
                 () -> new IllegalArgumentException("게시물이 존재하지 않습니다.")
         );
 
-        if (user.isSeller()) {
+        if (product.checkUsernameIsProductSeller(username)) {
             productRepository.delete(product);
         } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 삭제할 수 있습니다.");
 
@@ -148,21 +149,22 @@ public class SellerService {
         user.updateSellerProfile(sellerProfileUpdateRequest.getNickname(), sellerProfileUpdateRequest.getSellerDetail());
     }
 
-    // 전체상품 고객(구매)요청 목록 조회  // 페이징 필요  // bidderList에서 username이 없음 // 권한 상관없이 조회됨
+    // 전체상품 고객(구매)요청 목록 조회  // 페이징 필요  /
     @Transactional
-    public List<ProductPurchasePermissionResponse> getPurchasePermissionList() {
-        List<Product> products = productRepository.findAllByOrderByModifiedAt();
-        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();
-
-        for (Product product : products) {
-            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionByProduct(product);
-            List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
-            for (PurchasePermission purchasePermission : purchasePermissions) {
-                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getUsername(), purchasePermission.getBidder().getNickname(),purchasePermission.getMsg(), purchasePermission.getPrice()));
-            }
-            productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product.getId(), product.getTitle(), product.getPrice(), purchasePermissionResponses));
-        }
-        return productPurchasePermissionResponses;
+    public Page<ProductPurchasePermissionResponse> getPurchasePermissionList(String username, int page) {
+        //해당 유저의
+//        List<Product> products =  productRepository.findAllByOrderByModifiedAt();
+//        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();
+//
+//        for (Product product : products) {
+//            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionByProduct(product);
+//            List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
+//            for (PurchasePermission purchasePermission : purchasePermissions) {
+//                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getUsername(), purchasePermission.getBidder().getNickname(),purchasePermission.getMsg(), purchasePermission.getPrice()));
+//            }
+//            productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product.getId(), product.getTitle(), product.getPrice(), purchasePermissionResponses));
+//        }
+//        return productPurchasePermissionResponses;
     }
 
     // 고객(거래)요청 수락&완료

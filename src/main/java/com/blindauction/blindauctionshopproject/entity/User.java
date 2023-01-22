@@ -68,6 +68,7 @@ public class User {
         this.sellerDetail = sellerDetail;
     }
 
+
     public void updateUserToSeller() {
         this.role = SELLER;
     }

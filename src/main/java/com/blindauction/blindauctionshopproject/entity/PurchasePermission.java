@@ -1,6 +1,6 @@
 package com.blindauction.blindauctionshopproject.entity;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

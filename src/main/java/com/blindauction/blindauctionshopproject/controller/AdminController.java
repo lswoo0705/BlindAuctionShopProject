@@ -9,14 +9,12 @@ import com.blindauction.blindauctionshopproject.dto.admin.SellerPermissionRespon
 import com.blindauction.blindauctionshopproject.dto.admin.UserResponse;
 import com.blindauction.blindauctionshopproject.service.AdminService;
 import com.blindauction.blindauctionshopproject.util.jwtUtil.JwtUtil;
-import com.blindauction.blindauctionshopproject.util.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
