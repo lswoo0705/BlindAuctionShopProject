@@ -32,8 +32,8 @@ public class PurchasePermission {
     @Enumerated(value = EnumType.STRING)
     private TransactionStatusEnum transactionStatus; //구매신청 처리상태
 
-    public PurchasePermission(TransactionStatusEnum transactionStatus) {
-        this.transactionStatus = transactionStatus;
+    public boolean checkStatusIsWaiting(){
+        return this.getTransactionStatus().equals(TransactionStatusEnum.WAITING);
     }
 
     public void updateStatus(TransactionStatusEnum transactionStatusEnum) {

@@ -46,4 +46,8 @@ public class Product extends TimeStamped{
         this.price = price;
         this.productDetail = productDetail;
     }
+
+    public boolean checkUsernameIsProductSeller(String username) {
+        return this.getSeller().getUsername().equals(username);
+    }
 }

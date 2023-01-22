@@ -69,8 +69,7 @@ public class User {
     }
 
     public void updateUserToSeller() {
-        UserRoleEnum sellerrole = SELLER;
-        this.role = sellerrole;
+        this.role = SELLER;
     }
     public void updateUserPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;

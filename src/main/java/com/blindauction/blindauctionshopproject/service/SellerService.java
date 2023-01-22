@@ -33,7 +33,7 @@ public class SellerService {
         Long price = productRegisterRequest.getPrice();
         String productDetail = productRegisterRequest.getProductDetail();
         int bidderCnt = 0;
-        if (user.isSeller()){
+        if (user.isSeller()) {
             Product product = new Product(user, title, price, productDetail, bidderCnt);
             productRepository.save(product);
         } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 작성할 수 있습니다.");
@@ -99,7 +99,7 @@ public class SellerService {
                 () -> new IllegalArgumentException("게시물이 존재하지 않습니다.")
         );
 
-        if (user.isSeller()){
+        if (user.isSeller()) {
             product.update(user, productUpdateRequest.getTitle(), productUpdateRequest.getPrice(), productUpdateRequest.getProductDetail());
         } else throw new IllegalArgumentException("판매자 권한 유저만 판매글을 수정할 수 있습니다.");
     }
@@ -164,11 +164,16 @@ public class SellerService {
         PurchasePermission purchasePermission = purchasePermissionRepository.findById(permissionId).orElseThrow(
                 () -> new IllegalArgumentException("해당 permissionId의 판매요청글이 존재하지 않습니다")
         );
-        //2. request 에서 transactionStatusEnum 값 불러옴
-        TransactionStatusEnum transactionStatusEnum = purchasePermissionUpdateRequest.getTransactionStatus();
-
-        //3. 2에서 불러온 값을 purchasepermission에 넣음
-        purchasePermission.updateStatus(transactionStatusEnum);
-
+        //2. username 이 해당 product 글의 작성자인지 확인
+        if (!purchasePermission.getProduct().checkUsernameIsProductSeller(username)) {
+            throw new IllegalArgumentException("자신이 작상한 판매글에 달린 거래요청만 관리할 수 있습니다.");
+        }
+        //3. purchasePermission 이 WATTING 상태면 ACCEPTANCE 나 REFUSAL로 변경
+        TransactionStatusEnum status = purchasePermissionUpdateRequest.getTransactionStatus();
+        if (purchasePermission.checkStatusIsWaiting()) {
+            purchasePermission.updateStatus(status);
+        } else throw new IllegalArgumentException("이미 처리 완료된 거래요청입니다");
+        //4. WATTING 이 아닌경우 이미 처리 완료된 거래신청입니다.
     }
+
 }

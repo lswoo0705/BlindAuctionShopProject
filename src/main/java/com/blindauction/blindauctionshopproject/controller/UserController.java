@@ -94,7 +94,6 @@ public class UserController {
         //2. Request에서 phonNum 이랑 Detail 꺼내서 서비스로 보내기
         String phoneNum = sellerPermissionRegisterRequest.getPhoneNum();
         String permissionDetail = sellerPermissionRegisterRequest.getPermissionDetail();
-        userService.registerSellerPermission(phoneNum, permissionDetail, username);
 
         //3. 판매자 등록요청이 잘 됐다고 메세지 보내기
         StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "판매자 등록 신청 완료");
