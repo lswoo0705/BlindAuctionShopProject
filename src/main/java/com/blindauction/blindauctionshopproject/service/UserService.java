@@ -116,7 +116,7 @@ public class UserService {
     // 판매자 목록 조회
     @Transactional
     public Page<SellerResponse> getSellerList() {
-        return userRepository.findAllByRole(SELLER, PageRequest.of(10, 10))
+        return userRepository.findAllByRole(SELLER, PageRequest.of(0, 10))
                 .map(user -> new SellerResponse(user.getUsername(), user.getNickname(), user.getSellerDetail()));
     }
 }

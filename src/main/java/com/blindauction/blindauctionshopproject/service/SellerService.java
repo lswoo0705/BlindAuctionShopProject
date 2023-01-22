@@ -121,9 +121,26 @@ public class SellerService {
 
     }
 
-    //나의 판매자 프로필 설정
+    //나의 판매자 프로필 조회
     @Transactional
-    public void getSellerProfile(SellerProfileUpdateRequest sellerProfileUpdateRequest, String username) {
+    public SellerProfileResponse getSellerProfile(String username) {
+        //1. username 에 해당하는 유저가 있는지 찾는다.
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 username 의 유저가 존재하지 않습니다")
+        );
+        //3. 해당 유저가 셀러인지 확인한다
+        if (!user.isSeller()) {
+            throw new IllegalArgumentException("판매자인 유저만 사용 가능한 기능입니다.");
+        }
+        //4. user 객체의 정보 변경 (닉네임, 셀러디테일)
+        return new SellerProfileResponse(user.getUsername(), user.getNickname(), user.getSellerDetail());
+    }
+
+
+
+    //나의 판매자 프로필 수정
+    @Transactional
+    public void updateSellerProfile(SellerProfileUpdateRequest sellerProfileUpdateRequest, String username) {
         //1. username 에 해당하는 유저가 있는지 찾는다.
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 username 의 유저가 존재하지 않습니다")

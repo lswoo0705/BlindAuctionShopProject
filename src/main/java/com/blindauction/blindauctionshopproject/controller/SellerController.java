@@ -26,8 +26,6 @@ import java.util.List;
 public class SellerController {
     private final SellerService sellerService;
 
-    // 조회는 굳이 유저네임을 확인할 필요가 없으니까  (@AuthenticationPrincipal UserDetailsImpl userDetails) 파라미터를 안 받아도 됨, 나머지는 받아야만
-
     // 나의 판매상품 등록 [확인ㅇ]
     @PostMapping("/sellers/products")
     public ResponseEntity<StatusResponse> registerProduct(@RequestBody ProductRegisterRequest productRegisterRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -72,14 +70,22 @@ public class SellerController {
         sellerService.deleteSellerProduct(productId, username);
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
+    //나의 판매자 프로필 조회
+    @GetMapping("/sellers/profile")
+    public SellerProfileResponse getSellerProfile(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        String username = userDetails.getUsername();
+        return sellerService.getSellerProfile(username);
+    }
+
+
 
     //나의 판매자 프로필 수정
     @PutMapping("/sellers/profile")
-    public ResponseEntity<StatusResponse> getSellerProfile(@RequestBody SellerProfileUpdateRequest sellerProfileUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<StatusResponse> updateSellerProfile(@RequestBody SellerProfileUpdateRequest sellerProfileUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails){
         StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "프로필 수정 완료");
         HttpHeaders headers = new HttpHeaders();
         String username = userDetails.getUsername();
-        sellerService.getSellerProfile(sellerProfileUpdateRequest, username);
+        sellerService.updateSellerProfile(sellerProfileUpdateRequest, username);
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }
@@ -100,4 +106,7 @@ public class SellerController {
         sellerService.updatePurchasePermission(permissionId, purchasePermissionUpdateRequest, username);
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }
+
+
+
 }
