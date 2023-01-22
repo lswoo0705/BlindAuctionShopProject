@@ -1,6 +1,5 @@
 package com.blindauction.blindauctionshopproject.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,7 +27,6 @@ public class Product extends TimeStamped{
     private String productDetail;
 
     @Column(nullable = false)
-//    @GeneratedValue(strategy = GenerationType.AUTO)
     private int bidderCnt;
 
     public Product(User seller, String title, Long price, String productDetail, int bidderCnt) {
@@ -38,8 +36,6 @@ public class Product extends TimeStamped{
         this.productDetail = productDetail;
         this.bidderCnt = bidderCnt;
     }
-
-
 
     public void update(User seller, String title, Long price, String productDetail) {
         this.title = title;

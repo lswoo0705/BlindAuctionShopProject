@@ -1,6 +1,5 @@
 package com.blindauction.blindauctionshopproject.entity;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +14,7 @@ public class PurchasePermission {
     private long id; //구매신청 id
 
     @JoinColumn(nullable = false)  // 연관관계 다시 확인
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Product product; //원본 판매글
 
     @JoinColumn(nullable = false)  // 연관관계 다시 확인
