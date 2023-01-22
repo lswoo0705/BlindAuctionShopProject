@@ -31,11 +31,6 @@ public class ProductService {
         return products.map(ProductResponse::new);
     }
 
-        // 리스트 스트림으로 할 때
-//        return products.stream().map(ProductResponse::new).collect(Collectors.toList());
-//                                 내보내려는 형식                리스트로 만들어주겠다
-
-
     // 개별 판매상품 상세 조회
     public ProductDetailResponse getProductById(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
@@ -50,10 +45,13 @@ public class ProductService {
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다.")
         );
-
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")
         );
+
+        if(product.checkUsernameIsProductSeller(username)){
+            throw new IllegalArgumentException("판매글 작성 당사자는 구매요청을 할 수 없습니다.");
+        }
 
         TransactionStatusEnum statusEnum = TransactionStatusEnum.WAITING;
 

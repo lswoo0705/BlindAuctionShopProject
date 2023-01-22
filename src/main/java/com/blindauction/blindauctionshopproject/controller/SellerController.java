@@ -93,7 +93,7 @@ public class SellerController {
 
     // 전체상품 고객(구매)요청 목록 조회
     @GetMapping("/sellers/purchase-permission")
-    public Page<ProductPurchasePermissionResponse> getPurchasePermissionList(@AuthenticationPrincipal UserDetailsImpl userDetails, int page) {
+    public ProductPurchasePermissionResponse getPurchasePermissionList(@AuthenticationPrincipal UserDetailsImpl userDetails, int page) {
         String username = userDetails.getUsername();
         return sellerService.getPurchasePermissionList(username, page);
     }
