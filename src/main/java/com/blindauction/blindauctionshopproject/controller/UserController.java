@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
@@ -52,11 +53,16 @@ public class UserController {
 
     // 일반 로그아웃
     @PostMapping("/logout")
-    public ResponseEntity<StatusResponse> logoutUser(HttpServletResponse response) {
+    public ResponseEntity<StatusResponse> logoutUser(HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader(JwtUtil.AUTHORIZATION_HEADER);
+        userService.logoutUser(token);
+
         StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "로그아웃 완료");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         response.setHeader(JwtUtil.AUTHORIZATION_HEADER, "");
+
+
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }
 

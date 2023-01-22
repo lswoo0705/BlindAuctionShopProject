@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -152,19 +153,19 @@ public class SellerService {
     // 전체상품 고객(구매)요청 목록 조회  // 페이징 필요  /
     @Transactional
     public ProductPurchasePermissionResponse getPurchasePermissionList(String username, int page) {
-        //해당 유저의
-        List<Product> products =  productRepository.findAllByOrderByModifiedAt();
-        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();
-//
-        for (Product product : products) {
-            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionByProduct(product);
-            List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
-            for (PurchasePermission purchasePermission : purchasePermissions) {
-                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getUsername(), purchasePermission.getBidder().getNickname(),purchasePermission.getMsg(), purchasePermission.getPrice()));
-            }
-            productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product.getId(), product.getTitle(), product.getPrice(), purchasePermissionResponses));
-        }
-        return productPurchasePermissionResponses;
+
+//        List<Product> products =  productRepository.findAllByOrderByModifiedAt();
+//        List<ProductPurchasePermissionResponse> productPurchasePermissionResponses = new ArrayList<>();
+////
+//        for (Product product : products) {
+//            List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionByProduct(product);
+//            List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
+//            for (PurchasePermission purchasePermission : purchasePermissions) {
+//                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getUsername(), purchasePermission.getBidder().getNickname(),purchasePermission.getMsg(), purchasePermission.getPrice()));
+//            }
+//            productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product.getId(), product.getTitle(), product.getPrice(), purchasePermissionResponses));
+//        }
+//        return productPurchasePermissionResponses;
     }
 
     // 고객(거래)요청 수락&완료

@@ -4,9 +4,11 @@ import com.blindauction.blindauctionshopproject.dto.security.UsernameAndRoleResp
 import com.blindauction.blindauctionshopproject.dto.user.UserLoginRequest;
 import com.blindauction.blindauctionshopproject.dto.user.SellerResponse;
 import com.blindauction.blindauctionshopproject.dto.user.UserProfileResponse;
+import com.blindauction.blindauctionshopproject.entity.LogoutToken;
 import com.blindauction.blindauctionshopproject.entity.SellerPermission;
 import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.entity.UserRoleEnum;
+import com.blindauction.blindauctionshopproject.repository.LogoutTokenRepository;
 import com.blindauction.blindauctionshopproject.repository.SellerPermissionRepository;
 import com.blindauction.blindauctionshopproject.dto.user.UserSignupRequest;
 import com.blindauction.blindauctionshopproject.repository.UserRepository;
@@ -28,6 +30,7 @@ public class UserService {
     private final SellerPermissionRepository sellerPermissionRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LogoutTokenRepository logoutTokenRepository;
 
     // 나의 프로필 조회
     public UserProfileResponse getUserProfile(String userInfo) {
@@ -118,5 +121,11 @@ public class UserService {
     public Page<SellerResponse> getSellerList() {
         return userRepository.findAllByRole(SELLER, PageRequest.of(0, 10))
                 .map(user -> new SellerResponse(user.getUsername(), user.getNickname(), user.getSellerDetail()));
+    }
+
+    //유저 로그아웃 (블랙리스트에 추가)
+    public void logoutUser(String token) {
+        LogoutToken logoutToken = new LogoutToken(token);
+        logoutTokenRepository.save(logoutToken);
     }
 }

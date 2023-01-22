@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PurchasePermissionRepository extends JpaRepository<PurchasePermission, Long> {
-    List<PurchasePermission> findPurchasePermissionByProduct(Product product);
+    PurchasePermission findByProduct(Product product);
 
     List<PurchasePermission> findByTransactionStatus(TransactionStatusEnum transactionStatusEnum);
 }

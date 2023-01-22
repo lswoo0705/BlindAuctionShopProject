@@ -1,6 +1,7 @@
 package com.blindauction.blindauctionshopproject.util.jwtUtil;
 
 import com.blindauction.blindauctionshopproject.dto.security.SecurityExceptionDto;
+import com.blindauction.blindauctionshopproject.repository.LogoutTokenRepository;
 import com.blindauction.blindauctionshopproject.util.security.UserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -26,10 +27,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
 
+    private final LogoutTokenRepository logoutTokenRepository;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String token = jwtUtil.resolveToken(request); // 토큰 값 추출
+        if(logoutTokenRepository.existsByToken()){
+            jwtExceptionHandler(response, "로그아웃한 유저의 토큰입니다", HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
 
         if (token != null) { //토큰이 비어있지 않은 경우
             if (!jwtUtil.validateToken(token)) { //토큰 값이 유효하지 않은 경우
