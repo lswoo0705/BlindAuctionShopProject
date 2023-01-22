@@ -1,6 +1,5 @@
 package com.blindauction.blindauctionshopproject.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,13 +36,12 @@ public class Product extends TimeStamped{
         this.title = title;
         this.price = price;
         this.productDetail = productDetail;
+        this.bidderCnt = 0;
     }
 
     public void plusBidderCnt(){
         this.bidderCnt += 1;
     }
-
-
 
     public void update(User seller, String title, Long price, String productDetail) {
         this.title = title;

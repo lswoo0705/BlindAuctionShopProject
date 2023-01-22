@@ -5,8 +5,11 @@ import lombok.Getter;
 
 @Getter
 public class PurchasePermissionResponse {
+<<<<<<< HEAD
 //    private final String username;
 
+=======
+>>>>>>> 5c2392ad170c8b16c85aff986d3a61d88b78e377
     private final String username;
     private final String bidder;
     private final String msg;

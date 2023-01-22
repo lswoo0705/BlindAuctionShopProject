@@ -1,6 +1,5 @@
 package com.blindauction.blindauctionshopproject.entity;
 
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,14 +7,14 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-@Entity(name="PURCHASE_PERMISSION")
+@Entity(name = "PURCHASE_PERMISSION")
 public class PurchasePermission {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id; //구매신청 id
 
     @JoinColumn(nullable = false)  // 연관관계 다시 확인
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Product product; //원본 판매글
 
     @JoinColumn(nullable = false)  // 연관관계 다시 확인
@@ -32,7 +31,7 @@ public class PurchasePermission {
     @Enumerated(value = EnumType.STRING)
     private TransactionStatusEnum transactionStatus; //구매신청 처리상태
 
-    public boolean checkStatusIsWaiting(){
+    public boolean checkStatusIsWaiting() {
         return this.getTransactionStatus().equals(TransactionStatusEnum.WAITING);
     }
 
