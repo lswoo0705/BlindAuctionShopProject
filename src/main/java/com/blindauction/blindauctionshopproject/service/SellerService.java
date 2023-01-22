@@ -157,24 +157,18 @@ public class SellerService {
         return productPurchasePermissionResponses;
     }
 
-    // 고객(거래)요청 수락&완료  // 작업중
+    // 고객(거래)요청 수락&완료
     @Transactional
     public void updatePurchasePermission(Long permissionId, PurchasePermissionUpdateRequest purchasePermissionUpdateRequest, String username) {
+        //1. 해당 permisssionId 의 판매요청글이 있는지 확인하고 불러옴
         PurchasePermission purchasePermission = purchasePermissionRepository.findById(permissionId).orElseThrow(
-                () -> new IllegalArgumentException("구매 요청이 존재하지 않습니다.")
+                () -> new IllegalArgumentException("해당 permissionId의 판매요청글이 존재하지 않습니다")
         );
-        //판매자 확인
-        if (!purchasePermission.getProduct().getSeller().getUsername().equals(username)) {
-            throw new IllegalArgumentException("상품의 판매자만 수정할 수 있습니다.");
-        }
-        // 대기상태인지 먼저 확인
-        if (!purchasePermission.getTransactionStatus().equals(TransactionStatusEnum.WAITING)) { // 수락 or 거부 //수락일경우 예외처리
-            throw new IllegalArgumentException("이미 처리된 거래 요청입니다.");
-        }
-        // 대기인 경우 수락이나 거부를 넣을 수 잇음 <- controller 에서
-        // if (조건) { purchasePermission.update(purchasePermissionUpdateRequest.getTransactionStatus()); }  // REFUSAL
-        // 그후에 수락
-        // 수락
-//        purchasePermission.update(purchasePermissionUpdateRequest.getTransactionStatus());  // ACCEPTANCE
+        //2. request 에서 transactionStatusEnum 값 불러옴
+        TransactionStatusEnum transactionStatusEnum = purchasePermissionUpdateRequest.getTransactionStatus();
+
+        //3. 2에서 불러온 값을 purchasepermission에 넣음
+        purchasePermission.updateStatus(transactionStatusEnum);
+
     }
 }

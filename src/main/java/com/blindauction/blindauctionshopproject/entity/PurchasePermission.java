@@ -1,5 +1,6 @@
 package com.blindauction.blindauctionshopproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,12 +36,8 @@ public class PurchasePermission {
         this.transactionStatus = transactionStatus;
     }
 
-    public void updateStatus() {
-        this.transactionStatus = TransactionStatusEnum.ACCEPTANCE;
-    }
-
-    public void refusalStatus() {
-
+    public void updateStatus(TransactionStatusEnum transactionStatusEnum) {
+        this.transactionStatus = transactionStatusEnum;
     }
 
     // 생성자

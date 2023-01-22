@@ -93,8 +93,7 @@ public class SellerController {
     // 고객(거래)요청 수락&완료  // 작업중 // 수락 or 거부를 여기서 판별?
     @PutMapping("/sellers/purchase-permission/{permissionId}")
     public ResponseEntity<StatusResponse> updatePurchasePermission(@PathVariable Long permissionId, @RequestBody PurchasePermissionUpdateRequest purchasePermissionUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "구매 요청 거부"));
-        StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "구매 요청 허락");
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "구매 요청 처리 완료");
         HttpHeaders headers = new HttpHeaders();
         String username = userDetails.getUsername();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
