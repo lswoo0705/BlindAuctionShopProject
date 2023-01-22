@@ -29,11 +29,12 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, 10);
         Page<Product> products = productRepository.findAllByOrderByModifiedAtDesc(pageable);
         return products.map(ProductResponse::new);
+    }
 
         // 리스트 스트림으로 할 때
 //        return products.stream().map(ProductResponse::new).collect(Collectors.toList());
 //                                 내보내려는 형식                리스트로 만들어주겠다
-    }
+
 
     // 개별 판매상품 상세 조회
     public ProductDetailResponse getProductById(Long productId) {
