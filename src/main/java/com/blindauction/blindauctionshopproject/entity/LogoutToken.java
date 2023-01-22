@@ -7,13 +7,13 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-@Entity(name="LOGOUT-TOKEN")
+@Entity(name="BLACKLIST")
 public class LogoutToken {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column
+    @Column(nullable = false)
     String token;
 
     public LogoutToken(String token){

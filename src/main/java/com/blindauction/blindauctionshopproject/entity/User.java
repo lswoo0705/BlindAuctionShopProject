@@ -72,6 +72,10 @@ public class User {
     public void updateUserToSeller() {
         this.role = SELLER;
     }
+
+    public void updateSellerToUser() {
+        this.role = USER;
+    }
     public void updateUserPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
     }

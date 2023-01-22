@@ -88,17 +88,15 @@ public class AdminService {
 
     @Transactional
     public void deleteSellerRole(Long userId) { // 판매자 권한 삭제
-
-        User seller = userRepository.findByIdAndRole(userId, SELLER).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 고객이거나 권한이 판매자가 아닙니다.")
+        User seller = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 userid 입니다")
         );
+        if(!seller.isSeller()){
+            throw new IllegalArgumentException("해당 유저는 SELLER가 아닙니다");
+        }
+        seller.updateSellerToUser();
 
-        userRepository.save(
-                new User(
-                        seller.getUsername(),
-                        seller.getNickname(),
-                        seller.getPassword(),
-                        USER));
+
     }
 
     //관리자 로그인

@@ -58,7 +58,7 @@ public class SellerService {
                 () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다")
         );
         List<Product> products = productRepository.findProductById(productId);
-        List<PurchasePermission> purchasePermissions = products.stream().map(product -> purchasePermissionRepository.findByProduct(product)).toList();
+        List<PurchasePermission> purchasePermissions = products.stream().map(purchasePermissionRepository::findByProduct).toList();
         List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
         for (PurchasePermission purchasePermission : purchasePermissions) {
             purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getUsername(), purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));

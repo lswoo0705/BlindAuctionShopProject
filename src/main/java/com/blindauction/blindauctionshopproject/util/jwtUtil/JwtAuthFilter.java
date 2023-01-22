@@ -5,6 +5,7 @@ import com.blindauction.blindauctionshopproject.repository.LogoutTokenRepository
 import com.blindauction.blindauctionshopproject.util.security.UserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,9 +34,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String token = jwtUtil.resolveToken(request); // 토큰 값 추출
-        if(logoutTokenRepository.existsByToken()){
-            jwtExceptionHandler(response, "로그아웃한 유저의 토큰입니다", HttpStatus.UNAUTHORIZED.value());
-            return;
+
+        if(logoutTokenRepository.existsByToken(token)){
+            throw new IllegalArgumentException("이미 로그아웃 처리 된 토큰입니다");
         }
 
         if (token != null) { //토큰이 비어있지 않은 경우

@@ -4,5 +4,5 @@ import com.blindauction.blindauctionshopproject.entity.LogoutToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LogoutTokenRepository extends JpaRepository<LogoutToken, Long> {
-    boolean existsByToken();
+    boolean existsByToken(String token);
 }
