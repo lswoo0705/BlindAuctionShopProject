@@ -37,7 +37,6 @@ public class Product extends TimeStamped{
         this.title = title;
         this.price = price;
         this.productDetail = productDetail;
-        this.bidderCnt = 0;
     }
 
     public void plusBidderCnt(){

@@ -51,7 +51,7 @@ public class SellerService {
             List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionByProduct(product);
             List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
             for (PurchasePermission purchasePermission : purchasePermissions) {
-                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
+                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getUsername(), purchasePermission.getBidder().getNickname(),purchasePermission.getMsg(), purchasePermission.getPrice()));
             }
             int bidderCnt = purchasePermissionResponses.size();
             sellerProductResponses.add(new SellerProductResponse(product.getId(), product.getTitle(), product.getPrice(), product.getProductDetail(), bidderCnt));
@@ -70,7 +70,7 @@ public class SellerService {
             List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
 
             for (PurchasePermission purchasePermission : purchasePermissions) {
-                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
+                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getUsername(), purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
             }
 
             sellerProductDetailResponses.add(new SellerProductDetailResponse(product1.getTitle(), product1.getPrice(), product1.getProductDetail(), purchasePermissionResponses));
@@ -158,7 +158,7 @@ public class SellerService {
             List<PurchasePermission> purchasePermissions = purchasePermissionRepository.findPurchasePermissionByProduct(product);
             List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
             for (PurchasePermission purchasePermission : purchasePermissions) {
-                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
+                purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getUsername(), purchasePermission.getBidder().getNickname(),purchasePermission.getMsg(), purchasePermission.getPrice()));
             }
             productPurchasePermissionResponses.add(new ProductPurchasePermissionResponse(product.getId(), product.getTitle(), product.getPrice(), purchasePermissionResponses));
         }

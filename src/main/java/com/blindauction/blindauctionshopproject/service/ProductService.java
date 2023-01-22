@@ -58,6 +58,7 @@ public class ProductService {
         TransactionStatusEnum statusEnum = TransactionStatusEnum.WAITING;
 
         PurchasePermission purchasePermission = new PurchasePermission(product, user, msg, price, statusEnum);
+        product.plusBidderCnt();
         purchasePermissionRepository.save(purchasePermission);
     }
 }
