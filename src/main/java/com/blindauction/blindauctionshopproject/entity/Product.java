@@ -14,7 +14,7 @@ public class Product extends TimeStamped{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne // LAZY 때문에 null이 들어옴? 그래서 지웠습니다
     @JoinColumn(nullable = false)  // 연관관계 다시 확인
     private User seller;
 
