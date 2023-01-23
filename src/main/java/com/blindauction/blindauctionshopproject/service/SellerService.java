@@ -51,16 +51,19 @@ public class SellerService {
         return products.map(SellerProductResponse::new);
     }
 
-    // 나의 개별 판매상품 조회
+    // 나의 개별 판매상품 조회  // purchasePermission이 없을 경우 판매글도 조회가 안 됨
     @Transactional
     public List<SellerProductDetailResponse> getSellerProduct(String username, Long productId) {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다")
-        );
+        );  // 이걸 확인 할 필요가 있나..?
         List<Product> products = productRepository.findProductById(productId);
         List<PurchasePermission> purchasePermissions = products.stream().map(purchasePermissionRepository::findByProduct).toList();
         List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
         for (PurchasePermission purchasePermission : purchasePermissions) {
+            if (purchasePermission == null) {
+                return products.stream().map(SellerProductDetailResponse::new).toList();
+            }
             purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getUsername(), purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
         }
         return products.stream().map(product -> new SellerProductDetailResponse(product, purchasePermissionResponses)).toList();
@@ -81,7 +84,7 @@ public class SellerService {
     }
 
 
-    // 나의 판매상품 삭제  // 연관관계 오류 발생
+    // 나의 판매상품 삭제
     @Transactional
     public void deleteSellerProduct(Long productId, String username, ProductDeleteRequest productDeleteRequest) {
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -164,12 +167,12 @@ public class SellerService {
         if (!purchasePermission.getProduct().checkUsernameIsProductSeller(username)) {
             throw new IllegalArgumentException("자신이 작상한 판매글에 달린 거래요청만 관리할 수 있습니다.");
         }
-        //3. purchasePermission 이 WATTING 상태면 ACCEPTANCE 나 REFUSAL로 변경
+        //3. purchasePermission 이 WAITING 상태면 ACCEPTANCE 나 REFUSAL로 변경
         TransactionStatusEnum status = purchasePermissionUpdateRequest.getTransactionStatus();
         if (purchasePermission.checkStatusIsWaiting()) {
             purchasePermission.updateStatus(status);
         } else throw new IllegalArgumentException("이미 처리 완료된 거래요청입니다");
-        //4. WATTING 이 아닌경우 이미 처리 완료된 거래신청입니다.
+        //4. WAITING 이 아닌경우 이미 처리 완료된 거래신청입니다.
     }
 
 }

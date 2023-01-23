@@ -72,14 +72,13 @@ public class SellerController {
         sellerService.deleteSellerProduct(productId, username, productDeleteRequest);
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
+
     //나의 판매자 프로필 조회
     @GetMapping("/sellers/profile")
     public SellerProfileResponse getSellerProfile(@AuthenticationPrincipal UserDetailsImpl userDetails){
         String username = userDetails.getUsername();
         return sellerService.getSellerProfile(username);
     }
-
-
 
     //나의 판매자 프로필 수정
     @PutMapping("/sellers/profile")
@@ -99,7 +98,7 @@ public class SellerController {
         return sellerService.getPurchasePermissionList(username, page -1);
     }
 
-    // 고객(거래)요청 수락&완료  // 작업중 // 수락 or 거부를 여기서 판별?
+    // 고객(거래)요청 수락&완료
     @PutMapping("/sellers/purchase-permission/{permissionId}")
     public ResponseEntity<StatusResponse> updatePurchasePermission(@PathVariable Long permissionId, @RequestBody PurchasePermissionUpdateRequest purchasePermissionUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "구매 요청 처리 완료");
