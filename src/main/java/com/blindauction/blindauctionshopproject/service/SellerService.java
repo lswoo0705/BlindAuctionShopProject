@@ -58,6 +58,9 @@ public class SellerService {
                 () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다")
         );  // 이걸 확인 할 필요가 있나..?
         List<Product> products = productRepository.findProductById(productId);
+        if (products.isEmpty()) {
+            throw new IllegalArgumentException("해당 게시글이 없습니다");
+        }
         List<PurchasePermission> purchasePermissions = products.stream().map(purchasePermissionRepository::findByProduct).toList();
         List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
         for (PurchasePermission purchasePermission : purchasePermissions) {
