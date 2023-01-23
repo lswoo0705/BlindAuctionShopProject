@@ -1,6 +1,5 @@
 package com.blindauction.blindauctionshopproject.controller;
 
-
 import com.blindauction.blindauctionshopproject.dto.security.StatusResponse;
 import com.blindauction.blindauctionshopproject.dto.seller.*;
 import com.blindauction.blindauctionshopproject.dto.seller.ProductRegisterRequest;
@@ -26,10 +25,10 @@ import java.util.List;
 public class SellerController {
     private final SellerService sellerService;
 
-    // 나의 판매상품 등록 [확인ㅇ]
+    // 나의 판매상품 등록
     @PostMapping("/sellers/products")
     public ResponseEntity<StatusResponse> registerProduct(@RequestBody ProductRegisterRequest productRegisterRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "등록 완료");
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "상품 등록 완료");
         String username = userDetails.getUsername();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
@@ -54,7 +53,7 @@ public class SellerController {
     // 나의 판매상품 수정
     @PutMapping("/sellers/products/{productId}")
     public ResponseEntity<StatusResponse> updateSellerProduct(@PathVariable Long productId, @RequestBody ProductUpdateRequest productUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "수정 완료");
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "상품 수정 완료");
         String username = userDetails.getUsername();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));

@@ -9,8 +9,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductDeleteRequest {
     private String password;
-
-//    public ProductDeleteRequest(User user) {
-//        this.password = user.getPassword();
-//    }
 }
