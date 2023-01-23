@@ -30,5 +30,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             objectMapper.writeValue(os, exceptionDto);
             os.flush();
         }
+
     }
 }

@@ -7,18 +7,18 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-@Entity(name="PURCHASE_PERMISSION")
+@Entity(name = "PURCHASE_PERMISSION")
 public class PurchasePermission {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id; //구매신청 id
 
-    @JoinColumn(name = "title", nullable = false)  // 연관관계 다시 확인
-    @ManyToOne
+    @JoinColumn(nullable = false)  // 연관관계 다시 확인
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Product product; //원본 판매글
 
-    @JoinColumn(name = "nickname", nullable = false)  // 연관관계 다시 확인
-    @ManyToOne
+    @JoinColumn(nullable = false)  // 연관관계 다시 확인
+    @ManyToOne(fetch = FetchType.LAZY)
     private User bidder; //구매신청자
 
     @Column(nullable = false)
@@ -31,16 +31,12 @@ public class PurchasePermission {
     @Enumerated(value = EnumType.STRING)
     private TransactionStatusEnum transactionStatus; //구매신청 처리상태
 
-    public PurchasePermission(TransactionStatusEnum transactionStatus) {
-        this.transactionStatus = transactionStatus;
+    public boolean checkStatusIsWaiting() {
+        return this.getTransactionStatus().equals(TransactionStatusEnum.WAITING);
     }
 
-    public void updateStatus() {
-        this.transactionStatus = TransactionStatusEnum.ACCEPTANCE;
-    }
-
-    public void refusalStatus() {
-
+    public void updateStatus(TransactionStatusEnum transactionStatusEnum) {
+        this.transactionStatus = transactionStatusEnum;
     }
 
     // 생성자

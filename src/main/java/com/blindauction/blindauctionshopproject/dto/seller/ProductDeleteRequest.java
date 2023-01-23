@@ -1,13 +1,16 @@
 package com.blindauction.blindauctionshopproject.dto.seller;
 
-import com.blindauction.blindauctionshopproject.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductDeleteRequest {
-    private final String password;
+    private String password;
 
-    public ProductDeleteRequest(User user) {
-        this.password = user.getPassword();
-    }
+//    public ProductDeleteRequest(User user) {
+//        this.password = user.getPassword();
+//    }
 }

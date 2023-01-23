@@ -1,5 +1,6 @@
 package com.blindauction.blindauctionshopproject.util.config;
 
+import com.blindauction.blindauctionshopproject.repository.LogoutTokenRepository;
 import com.blindauction.blindauctionshopproject.util.jwtUtil.JwtAuthFilter;
 import com.blindauction.blindauctionshopproject.util.jwtUtil.JwtUtil;
 import com.blindauction.blindauctionshopproject.util.security.CustomAccessDeniedHandler;
@@ -28,6 +29,8 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    private final LogoutTokenRepository logoutTokenRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -64,7 +67,7 @@ public class WebSecurityConfig {
 
                 .anyRequest().authenticated()
                 //이하 jwt 를 인증&인가에 사용하기 위한 설정임.
-                .and().addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService, logoutTokenRepository), UsernamePasswordAuthenticationFilter.class);
 
         http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
         //403

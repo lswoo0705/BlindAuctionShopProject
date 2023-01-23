@@ -1,6 +1,5 @@
 package com.blindauction.blindauctionshopproject.dto.seller;
 
-import com.blindauction.blindauctionshopproject.entity.Product;
 import lombok.Getter;
 
 @Getter
@@ -9,9 +8,9 @@ public class ProductRegisterRequest {
     private final Long price;
     private final String productDetail;
 
-    public ProductRegisterRequest(Product product) {
-        this.title = product.getTitle();
-        this.price = product.getPrice();
-        this.productDetail = product.getProductDetail();
+    public ProductRegisterRequest(String title, Long price, String productDetail) {
+        this.title = title;
+        this.price = price;
+        this.productDetail = productDetail;
     }
 }

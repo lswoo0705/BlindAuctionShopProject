@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
@@ -28,7 +29,7 @@ public class UserController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
 
-    // 일반 회원가입
+    // 일반 회원가입 [확인ㅇ]
     @PostMapping("/signup")
     public ResponseEntity<StatusResponse> signupUser(@RequestBody @Valid UserSignupRequest userSignupRequest) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.CREATED.value(), "회원가입 완료");
@@ -39,9 +40,9 @@ public class UserController {
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.CREATED);
     }
 
-    // 일반 로그인
+    // 일반 로그인 [확인ㅇ]
     @PostMapping("/login")
-    public ResponseEntity<StatusResponse> loginUser(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response){
+    public ResponseEntity<StatusResponse> loginUser(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "로그인 완료"); // resposneEntity 용 http 상태 정보 담긴 dto 생성
         HttpHeaders headers = new HttpHeaders(); // 헤더 생성
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8)); // header 의 정보 타입 지정
@@ -52,12 +53,17 @@ public class UserController {
 
     // 일반 로그아웃
     @PostMapping("/logout")
-    public ResponseEntity<StatusResponse> logoutUser(HttpServletResponse response){
-    StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "로그아웃 완료");
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-    response.setHeader(JwtUtil.AUTHORIZATION_HEADER, "");
-    return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
+    public ResponseEntity<StatusResponse> logoutUser(HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader(JwtUtil.AUTHORIZATION_HEADER);
+        userService.logoutUser(token);
+
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "로그아웃 완료");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, "");
+
+
+        return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }
 
     // 나의 프로필 조회
@@ -87,16 +93,20 @@ public class UserController {
 
     // 판매자 등록 요청
     @PostMapping("/seller-permission")
-    public ResponseEntity<StatusResponse> registerSellerPermission(@RequestBody SellerPermissionRegisterRequest
-                                                                           sellerPermissionRegisterRequest) {
+    public ResponseEntity<StatusResponse> registerSellerPermission(@RequestBody SellerPermissionRegisterRequest sellerPermissionRegisterRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        //1.userDetails 에서 username 꺼내기
+        String username = userDetails.getUsername();
+
+        //2. Request에서 phonNum 이랑 Detail 꺼내서 서비스로 보내기
         String phoneNum = sellerPermissionRegisterRequest.getPhoneNum();
         String permissionDetail = sellerPermissionRegisterRequest.getPermissionDetail();
 
+        //3. 판매자 등록요청이 잘 됐다고 메세지 보내기
         StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "판매자 등록 신청 완료");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-        userService.registerSellerPermission(phoneNum, permissionDetail);
+        userService.registerSellerPermission(phoneNum, permissionDetail, username);
 
         return new ResponseEntity<>(statusResponse, headers, HttpStatus.OK);
     }

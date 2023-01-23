@@ -69,31 +69,36 @@ public class AdminService {
         return sellerPermissionRepository.findAllByOrderByModifiedAtDesc(PageRequest.of(10, 10)).map(SellerPermissionResponse::new);
     }
 
-//    @Transactional
-//    public void acceptSellerRole(Long userId, User user) { // 판매자 권한 승인
-//
-//        SellerPermission sellerPermission = sellerPermissionRepository.findById(userId).orElseThrow(
-//                () -> new IllegalArgumentException("존재하지 않는 요청입니다.")
-//        );
-//
-//        user = userRepository.findByIdAndRole(username, USER).orElseThrow(
-//                () -> new IllegalArgumentException("존재하지 않는 고객이거나 권한이 고객이 아닙니다.")
-//        );
-//    }
+    @Transactional
+    public void acceptSellerRole(Long userId) { // 판매자 권한 승인
+        //1. userid 에 해당하는 유저가 존재하는지
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 UserId 입니다.")
+        );
+        //2. 존재한다면 그 유저의 역할을 확인. user의 권한이 USER인 경우, SellerPermission Repository에서 그 유저가 작성한 permisssion이 있는지 확인
+        if (user.isUser()) {
+            SellerPermission sellerPermission = sellerPermissionRepository.findByUser(user).orElseThrow(
+                    () -> new IllegalArgumentException("해당 유저는 판매자 전환신청서를 작성하지 않았습니다.")
+            );
+            //3. permisssion이 존재하면 그 permisssion에서 전화번호를 가져와서, 권한 USER >> SELLER / 전화번호를 등록
+            String phoneNum = sellerPermission.getPhoneNum();
+            user.updateUserToSeller();
+            user.updateUserPhoneNum(phoneNum);
+
+        } else throw new IllegalArgumentException("일반유저가 아닙니다.");
+    }
 
     @Transactional
     public void deleteSellerRole(Long userId) { // 판매자 권한 삭제
-
-        User seller = userRepository.findByIdAndRole(userId, SELLER).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 고객이거나 권한이 판매자가 아닙니다.")
+        User seller = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 userid 입니다")
         );
+        if(!seller.isSeller()){
+            throw new IllegalArgumentException("해당 유저는 SELLER가 아닙니다");
+        }
+        seller.updateSellerToUser();
 
-        userRepository.save(
-                new User(
-                        seller.getUsername(),
-                        seller.getNickname(),
-                        seller.getPassword(),
-                        USER));
+
     }
 
     //관리자 로그인
