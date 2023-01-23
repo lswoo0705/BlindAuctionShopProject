@@ -61,7 +61,7 @@ public class SellerService {
         List<PurchasePermission> purchasePermissions = products.stream().map(purchasePermissionRepository::findByProduct).toList();
         List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
         for (PurchasePermission purchasePermission : purchasePermissions) {
-            purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getUsername(), purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
+            purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission));
         }
         return products.stream().map(product -> new SellerProductDetailResponse(product, purchasePermissionResponses)).toList();
     }
@@ -148,7 +148,7 @@ public class SellerService {
         List<PurchasePermission> purchasePermissions = products.stream().map(product -> purchasePermissionRepository.findByProduct(product)).toList();
         List<PurchasePermissionResponse> purchasePermissionResponses = new ArrayList<>();
         for (PurchasePermission purchasePermission : purchasePermissions) {
-            purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission.getBidder().getUsername(), purchasePermission.getBidder().getNickname(), purchasePermission.getMsg(), purchasePermission.getPrice()));
+            purchasePermissionResponses.add(new PurchasePermissionResponse(purchasePermission));
         }
         return products.map(product -> new ProductPurchasePermissionResponse(product, purchasePermissionResponses));
     }
