@@ -77,15 +77,13 @@ public class SellerService {
     // 나의 판매상품 수정
     @Transactional
     public void updateSellerProduct(Long productId, ProductUpdateRequest productUpdateRequest, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다")
-        );
-
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new IllegalArgumentException("게시물이 존재하지 않습니다.")
         );
 
-        product.update(user, productUpdateRequest.getTitle(), productUpdateRequest.getPrice(), productUpdateRequest.getProductDetail());
+        if (product.checkUsernameIsProductSeller(username)) {
+            product.update(productUpdateRequest.getTitle(), productUpdateRequest.getPrice(), productUpdateRequest.getProductDetail());
+        } else throw new IllegalArgumentException("자신이 작성한 판매글만 수정할 수 있습니다.");
     }
 
 
