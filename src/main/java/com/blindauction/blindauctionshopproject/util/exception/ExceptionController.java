@@ -96,22 +96,6 @@ public class ExceptionController {
         httpHeaders.setContentType(new MediaType("application","json", StandardCharsets.UTF_8));
         return new ResponseEntity<>(statusResponseDto,httpHeaders,HttpStatus.BAD_REQUEST);
     }
-
-//    @ExceptionHandler(IOException.class)
-//    private ResponseEntity<StatusResponse> IOExceptionHandler(IOException e){
-//        StatusResponse statusResponse = new StatusResponse(HttpStatus.FORBIDDEN.value(), e.getMessage());
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.setContentType(new MediaType("application","json", StandardCharsets.UTF_8));
-//        return new ResponseEntity<>(statusResponse,httpHeaders,HttpStatus.FORBIDDEN);
-//    }
-//
-//    @ExceptionHandler(ServletException.class)
-//    private ResponseEntity<StatusResponse> ServletExceptionHandler(ServletException e){
-//        StatusResponse statusResponse = new StatusResponse(HttpStatus.FORBIDDEN.value(), e.getMessage());
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.setContentType(new MediaType("application","json", StandardCharsets.UTF_8));
-//        return new ResponseEntity<>(statusResponse,httpHeaders,HttpStatus.FORBIDDEN);
-//    }
 @ExceptionHandler(IOException.class)
 private ResponseEntity<StatusResponse> IOExceptionHandler(IOException e){
     StatusResponse statusResponse = new StatusResponse(HttpStatus.FORBIDDEN.value(), e.getMessage());

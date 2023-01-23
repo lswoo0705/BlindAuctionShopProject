@@ -74,6 +74,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             response.getWriter().write(json);
         } catch (Exception e) {
             log.error(e.getMessage());
+            throw new IllegalArgumentException("사람살려요");
         }
     }
 

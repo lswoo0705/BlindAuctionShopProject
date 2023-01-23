@@ -27,7 +27,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
     private final JwtUtil jwtUtil; // jwt를 사용하기 위해서 객체 생성
     private final UserDetailsServiceImpl userDetailsService;
+
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     private final LogoutTokenRepository logoutTokenRepository;
@@ -69,9 +71,9 @@ public class WebSecurityConfig {
                 //이하 jwt 를 인증&인가에 사용하기 위한 설정임.
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService, logoutTokenRepository), UsernamePasswordAuthenticationFilter.class);
 
-        http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint);
-        //403
-        http.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
+        http.exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint); //401
+
+        http.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler); //403
 
         return http.build();
     }
