@@ -4,7 +4,7 @@ import com.blindauction.blindauctionshopproject.entity.PurchasePermission;
 import com.blindauction.blindauctionshopproject.entity.TransactionStatusEnum;
 import lombok.Getter;
 
-import javax.persistence.Column;
+
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
@@ -13,10 +13,8 @@ public class PurchasePermissionResponse {
     private final String username;
     private final String bidder;
     private final String msg;
-    private final Long price;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    private final Long price;
     private TransactionStatusEnum transactionStatusEnum;
 
     public PurchasePermissionResponse(PurchasePermission purchasePermission){

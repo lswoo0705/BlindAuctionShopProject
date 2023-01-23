@@ -16,8 +16,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.ServletException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -93,5 +95,21 @@ public class ExceptionController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application","json", StandardCharsets.UTF_8));
         return new ResponseEntity<>(statusResponseDto,httpHeaders,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IOException.class)
+    private ResponseEntity<StatusResponse> IOExceptionHandler(IOException e){
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.FORBIDDEN.value(), "잘못된 접근입니다");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(new MediaType("application","json", StandardCharsets.UTF_8));
+        return new ResponseEntity<>(statusResponse,httpHeaders,HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ServletException.class)
+    private ResponseEntity<StatusResponse> ServletExceptionHandler(ServletException e){
+        StatusResponse statusResponse = new StatusResponse(HttpStatus.FORBIDDEN.value(), "잘못된 접근입니다");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(new MediaType("application","json", StandardCharsets.UTF_8));
+        return new ResponseEntity<>(statusResponse,httpHeaders,HttpStatus.FORBIDDEN);
     }
 }
