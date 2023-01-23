@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +27,8 @@ public class ProductService {
     // 전체 판매상품 목록 조회
     @Transactional
     public Page<ProductResponse> getProductList(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<Product> products = productRepository.findAllByOrderByModifiedAtDesc(pageable);
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "id"));
+        Page<Product> products = productRepository.findAll(pageable);
         return products.map(ProductResponse::new);
     }
 
