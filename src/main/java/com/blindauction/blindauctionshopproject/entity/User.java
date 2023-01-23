@@ -11,6 +11,7 @@ import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.SELLE
 @NoArgsConstructor
 @Entity(name="USERS")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -62,4 +63,5 @@ public class User {
         this.nickname = nickname;
         this.sellerDetail = sellerDetail;
     }
+
 }

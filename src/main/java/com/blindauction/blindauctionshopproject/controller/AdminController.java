@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -42,7 +43,7 @@ public class AdminController {
     }
 
     @GetMapping("/users") // 회원목록 조회
-    public Page<UserResponse> getUserList() {
+    public List<UserResponse> getUserList() {
         return adminService.getUserList();
     }
 
@@ -56,11 +57,11 @@ public class AdminController {
         return adminService.getSellerPermissionList();
     }
 
-    @PutMapping("/role/{userId}") // 판매자 권한 승인
-    public ResponseEntity<StatusResponse> acceptSellerRole(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long userId) {
-        adminService.acceptSellerRole(userId, userDetails.getUser());
-        return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "권한 승인"));
-    }
+//    @PutMapping("/role/{userId}") // 판매자 권한 승인
+//    public ResponseEntity<StatusResponse> acceptSellerRole(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long userId) {
+//        adminService.acceptSellerRole(userId, userDetails.getUser());
+//        return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "권한 승인"));
+//    }
 
     @PutMapping("/role/delete/{userId}") // 판매자 권한 삭제
     public ResponseEntity<StatusResponse> deleteSellerRole(@PathVariable Long userId) {

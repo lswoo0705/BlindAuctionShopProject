@@ -18,7 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.SELLER;
 import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.USER;
@@ -51,15 +53,15 @@ public class AdminService {
     }
 
     @Transactional // 회원목록 조회
-    public Page<UserResponse> getUserList() {
-        return userRepository.findAllByRole(USER, PageRequest.of(10, 10)).map(UserResponse::new);
+    public List<UserResponse> getUserList() {
+        return userRepository.findAllByRole(USER, PageRequest.of(10, 10)).map(UserResponse::new).stream().toList();
         // (클래스 :: 메서드)
     }
 
     @Transactional
     public Page<SellerDetailResponse> getSellerList() { // 판매자목록 조회
         return userRepository.findAllByRole(SELLER, PageRequest.of(10, 10))
-                .map(user -> new SellerDetailResponse(user.getUsername(), user.getNickname(), user.getPhoneNum(), user.getSellerDetail()));
+                .map(user -> new SellerDetailResponse(user.getUsername(), user.getNickname(), user.getNickname(), user.getSellerDetail()));
     }
 
     @Transactional
@@ -67,25 +69,17 @@ public class AdminService {
         return sellerPermissionRepository.findAllByOrderByModifiedAtDesc(PageRequest.of(10, 10)).map(SellerPermissionResponse::new);
     }
 
-    @Transactional
-    public void acceptSellerRole(Long userId, User user) { // 판매자 권한 승인
-
-        SellerPermission sellerPermission = sellerPermissionRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 요청입니다.")
-        );
-
-        user = userRepository.findByIdAndRole(userId, USER).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 고객이거나 권한이 고객이 아닙니다.")
-        );
-
-       userRepository.save(
-               new User(
-                       user.getUsername(),
-                       user.getNickname(),
-                       user.getPassword(),
-                       sellerPermission.getPhoneNum(),
-                       SELLER));
-    }
+//    @Transactional
+//    public void acceptSellerRole(Long userId, User user) { // 판매자 권한 승인
+//
+//        SellerPermission sellerPermission = sellerPermissionRepository.findById(userId).orElseThrow(
+//                () -> new IllegalArgumentException("존재하지 않는 요청입니다.")
+//        );
+//
+//        user = userRepository.findByIdAndRole(username, USER).orElseThrow(
+//                () -> new IllegalArgumentException("존재하지 않는 고객이거나 권한이 고객이 아닙니다.")
+//        );
+//    }
 
     @Transactional
     public void deleteSellerRole(Long userId) { // 판매자 권한 삭제
