@@ -19,6 +19,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-
+        response.addHeader();
+        throw new IOException("잘못된 접근입니다.");
     }
 }
