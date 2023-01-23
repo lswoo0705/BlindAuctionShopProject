@@ -93,7 +93,8 @@ public class UserController {
 
     // 판매자 등록 요청
     @PostMapping("/seller-permission")
-    public ResponseEntity<StatusResponse> registerSellerPermission(@RequestBody SellerPermissionRegisterRequest sellerPermissionRegisterRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<StatusResponse> registerSellerPermission(@RequestBody SellerPermissionRegisterRequest sellerPermissionRegisterRequest,
+                                                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
         //1.userDetails 에서 username 꺼내기
         String username = userDetails.getUsername();
 

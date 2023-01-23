@@ -64,6 +64,11 @@ public class UserService {
                 () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")
         );
 
+        // 요청 중복 방지
+        if (sellerPermissionRepository.findByUser(user).isPresent()) {
+            throw new IllegalArgumentException("이미 신청된 판매자 등록 요청입니다.");
+        }
+
         SellerPermission sellerPermission = new SellerPermission(user, phoneNum, permissionDetail);
         sellerPermissionRepository.save(sellerPermission);
     }
