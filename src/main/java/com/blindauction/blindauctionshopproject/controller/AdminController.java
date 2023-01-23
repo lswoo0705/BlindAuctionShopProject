@@ -41,7 +41,7 @@ public class AdminController {
     }
 
     @GetMapping("/users") // 회원목록 조회
-    public List<UserResponse> getUserList() {
+    public Page<UserResponse> getUserList() {
         return adminService.getUserList();
     }
 

@@ -53,20 +53,20 @@ public class AdminService {
     }
 
     @Transactional // 회원목록 조회
-    public List<UserResponse> getUserList() {
-        return userRepository.findAllByRole(USER, PageRequest.of(10, 10)).map(UserResponse::new).stream().toList();
+    public Page<UserResponse> getUserList() {
+        return userRepository.findAllByRole(USER, PageRequest.of(0, 10)).map(UserResponse::new);
         // (클래스 :: 메서드)
     }
 
     @Transactional
     public Page<SellerDetailResponse> getSellerList() { // 판매자목록 조회
-        return userRepository.findAllByRole(SELLER, PageRequest.of(10, 10))
+        return userRepository.findAllByRole(SELLER, PageRequest.of(0, 10))
                 .map(user -> new SellerDetailResponse(user.getUsername(), user.getNickname(), user.getNickname(), user.getSellerDetail()));
     }
 
     @Transactional
     public Page<SellerPermissionResponse> getSellerPermissionList() { // 판매자권한 요청목록 조회
-        return sellerPermissionRepository.findAllByOrderByModifiedAtDesc(PageRequest.of(10, 10)).map(SellerPermissionResponse::new);
+        return sellerPermissionRepository.findAllByOrderByModifiedAtDesc(PageRequest.of(0, 10)).map(SellerPermissionResponse::new);
     }
 
     @Transactional
