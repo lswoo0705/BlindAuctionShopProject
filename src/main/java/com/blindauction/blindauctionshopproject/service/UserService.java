@@ -1,24 +1,19 @@
 package com.blindauction.blindauctionshopproject.service;
 
 import com.blindauction.blindauctionshopproject.dto.security.UsernameAndRoleResponse;
-import com.blindauction.blindauctionshopproject.dto.user.UserLoginRequest;
-import com.blindauction.blindauctionshopproject.dto.user.SellerResponse;
-import com.blindauction.blindauctionshopproject.dto.user.UserProfileResponse;
-import com.blindauction.blindauctionshopproject.entity.LogoutToken;
-import com.blindauction.blindauctionshopproject.entity.SellerPermission;
-import com.blindauction.blindauctionshopproject.entity.User;
-import com.blindauction.blindauctionshopproject.entity.UserRoleEnum;
-import com.blindauction.blindauctionshopproject.repository.LogoutTokenRepository;
-import com.blindauction.blindauctionshopproject.repository.SellerPermissionRepository;
-import com.blindauction.blindauctionshopproject.dto.user.UserSignupRequest;
-import com.blindauction.blindauctionshopproject.repository.UserRepository;
+import com.blindauction.blindauctionshopproject.dto.user.*;
+import com.blindauction.blindauctionshopproject.entity.*;
+import com.blindauction.blindauctionshopproject.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Enumerated;
 import java.util.Optional;
 
 import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.SELLER;
@@ -31,6 +26,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final LogoutTokenRepository logoutTokenRepository;
+    private final ProductRepository productRepository;
+    private final PurchasePermissionRepository purchasePermissionRepository;
 
     // 나의 프로필 조회
     public UserProfileResponse getUserProfile(String userInfo) {
@@ -132,5 +129,19 @@ public class UserService {
     public void logoutUser(String token) {
         LogoutToken logoutToken = new LogoutToken(token);
         logoutTokenRepository.save(logoutToken);
+    }
+
+    // 나의 전체 구매신청 상태 조회
+    @Transactional
+    public Page<PurchaseStatusGetResponse> getPurchaseStatuse(String username, int page) {
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "id"));
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")
+        );
+
+        Page<PurchasePermission> purchasePermissionPage = purchasePermissionRepository.findAllByBidder(user, pageable);
+
+        return purchasePermissionPage.map(PurchaseStatusGetResponse::new);
     }
 }
