@@ -49,8 +49,12 @@ public class ProductService {
                 () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")
         );
 
-        if(product.checkUsernameIsProductSeller(username)){
+        if (product.checkUsernameIsProductSeller(username)) {
             throw new IllegalArgumentException("판매글 작성 당사자는 구매요청을 할 수 없습니다.");
+        }
+
+        if (!purchasePermissionRepository.findByProductAndBidder(product, user).isEmpty()) {
+            throw new IllegalArgumentException("이미 구매요청하신 상품입니다.");
         }
 
         TransactionStatusEnum statusEnum = TransactionStatusEnum.WAITING;
