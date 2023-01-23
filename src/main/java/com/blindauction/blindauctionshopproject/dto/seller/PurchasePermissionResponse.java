@@ -4,10 +4,6 @@ import com.blindauction.blindauctionshopproject.entity.PurchasePermission;
 import com.blindauction.blindauctionshopproject.entity.TransactionStatusEnum;
 import lombok.Getter;
 
-
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
 @Getter
 public class PurchasePermissionResponse {
     private final String username;
@@ -15,7 +11,7 @@ public class PurchasePermissionResponse {
     private final String msg;
 
     private final Long price;
-    private TransactionStatusEnum transactionStatusEnum;
+    private final TransactionStatusEnum transactionStatusEnum;
 
     public PurchasePermissionResponse(PurchasePermission purchasePermission){
         this.username = purchasePermission.getBidder().getUsername();
