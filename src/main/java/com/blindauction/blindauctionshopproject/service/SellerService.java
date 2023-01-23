@@ -50,12 +50,12 @@ public class SellerService {
         return products.map(SellerProductResponse::new);
     }
 
-    // 나의 개별 판매상품 조회  // purchasePermission이 없을 경우 판매글도 조회가 안 됨
+    // 나의 개별 판매상품 조회
     @Transactional
     public List<SellerProductDetailResponse> getSellerProduct(String username, Long productId) {
-        User user = userRepository.findByUsername(username).orElseThrow(
+        userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다")
-        );  // 이걸 확인 할 필요가 있나..?
+        );
         List<Product> products = productRepository.findProductById(productId);
         if (products.isEmpty()) {
             throw new IllegalArgumentException("해당 게시글이 없습니다");
@@ -170,7 +170,7 @@ public class SellerService {
             throw new IllegalArgumentException("자신이 작상한 판매글에 달린 거래요청만 관리할 수 있습니다.");
         }
         //3. purchasePermission 이 WAITING 상태면 ACCEPTANCE 나 REFUSAL로 변경
-        TransactionStatusEnum status = purchasePermissionUpdateRequest.getTransactionStatus();
+        PermissionStatusEnum status = purchasePermissionUpdateRequest.getTransactionStatus();
         if (purchasePermission.checkStatusIsWaiting()) {
             purchasePermission.updateStatus(status);
         } else throw new IllegalArgumentException("이미 처리 완료된 거래요청입니다");

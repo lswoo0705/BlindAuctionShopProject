@@ -32,18 +32,18 @@ public class PurchasePermission {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private TransactionStatusEnum transactionStatus; //구매신청 처리상태
+    private PermissionStatusEnum transactionStatus; //구매신청 처리상태
 
     public boolean checkStatusIsWaiting() {
-        return this.getTransactionStatus().equals(TransactionStatusEnum.WAITING);
+        return this.getTransactionStatus().equals(PermissionStatusEnum.WAITING);
     }
 
-    public void updateStatus(TransactionStatusEnum transactionStatusEnum) {
-        this.transactionStatus = transactionStatusEnum;
+    public void updateStatus(PermissionStatusEnum permissionStatusEnum) {
+        this.transactionStatus = permissionStatusEnum;
     }
 
     // 생성자
-    public PurchasePermission(Product product, User bidder, String msg, Long price, TransactionStatusEnum transactionStatus) {
+    public PurchasePermission(Product product, User bidder, String msg, Long price, PermissionStatusEnum transactionStatus) {
         this.product = product;
         this.bidder = bidder;
         this.msg = msg;

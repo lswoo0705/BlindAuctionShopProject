@@ -1,7 +1,6 @@
 package com.blindauction.blindauctionshopproject.util.security;
 
 import com.blindauction.blindauctionshopproject.dto.security.SecurityExceptionDto;
-import com.blindauction.blindauctionshopproject.dto.security.StatusResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;

@@ -2,7 +2,7 @@ package com.blindauction.blindauctionshopproject.entity;
 
 import lombok.Getter;
 
-public enum TransactionStatusEnum {
+public enum PermissionStatusEnum {
     WAITING("WAITING"),
     ACCEPTANCE("ACCEPTANCE"),
     REFUSAL("REFUSAL");
@@ -10,7 +10,7 @@ public enum TransactionStatusEnum {
     @Getter
     private final String status;
 
-    TransactionStatusEnum(String status){
+    PermissionStatusEnum(String status){
         this.status = status;
     }
 

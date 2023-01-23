@@ -4,7 +4,7 @@ import com.blindauction.blindauctionshopproject.dto.product.ProductDetailRespons
 import com.blindauction.blindauctionshopproject.dto.product.ProductResponse;
 import com.blindauction.blindauctionshopproject.entity.Product;
 import com.blindauction.blindauctionshopproject.entity.PurchasePermission;
-import com.blindauction.blindauctionshopproject.entity.TransactionStatusEnum;
+import com.blindauction.blindauctionshopproject.entity.PermissionStatusEnum;
 import com.blindauction.blindauctionshopproject.entity.User;
 import com.blindauction.blindauctionshopproject.repository.ProductRepository;
 import com.blindauction.blindauctionshopproject.repository.PurchasePermissionRepository;
@@ -58,7 +58,7 @@ public class ProductService {
             throw new IllegalArgumentException("이미 구매요청하신 상품입니다.");
         }
 
-        TransactionStatusEnum statusEnum = TransactionStatusEnum.WAITING;
+        PermissionStatusEnum statusEnum = PermissionStatusEnum.WAITING;
 
         PurchasePermission purchasePermission = new PurchasePermission(product, user, msg, price, statusEnum);
         product.plusBidderCnt();

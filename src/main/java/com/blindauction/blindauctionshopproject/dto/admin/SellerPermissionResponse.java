@@ -1,7 +1,7 @@
 package com.blindauction.blindauctionshopproject.dto.admin;
 
 import com.blindauction.blindauctionshopproject.entity.SellerPermission;
-import com.blindauction.blindauctionshopproject.entity.TransactionStatusEnum;
+import com.blindauction.blindauctionshopproject.entity.PermissionStatusEnum;
 import lombok.Getter;
 
 @Getter
@@ -16,7 +16,7 @@ public class SellerPermissionResponse {
 
     String permissionDetail;
 
-    TransactionStatusEnum acceptanceStatus;
+    PermissionStatusEnum acceptanceStatus;
 
     public SellerPermissionResponse(SellerPermission sellerPermission) {
         this.permissionId = sellerPermission.getId();

@@ -48,7 +48,7 @@ public class BlindauctionshopprojectApplication {
             productRepository.save(product);
 
             // user 가 작성한 거래요청글 생성 & 레퍼지토리 저장
-            purchasePermissionRepository.save(new PurchasePermission(product, user, "춘식인형 너무 갖고싶어요", (long)35000, TransactionStatusEnum.WAITING));
+            purchasePermissionRepository.save(new PurchasePermission(product, user, "춘식인형 너무 갖고싶어요", (long)35000, PermissionStatusEnum.WAITING));
             product.plusBidderCnt();
             productRepository.save(product);
         });

@@ -19,25 +19,25 @@ public class SellerPermission extends TimeStamped{
     private String phoneNum; // 연락처
     private String permissionDetail; // 판매자 신청서 상세 내용
     @Enumerated(value = EnumType.STRING)
-    private TransactionStatusEnum acceptance_status; // 대기중 / 수락 / 거부
+    private PermissionStatusEnum acceptance_status; // 대기중 / 수락 / 거부
 
     public SellerPermission(User user, String phoneNum, String permissionDetail) {
         this.user = user;
         this.phoneNum = phoneNum;
         this.permissionDetail = permissionDetail;
-        this.acceptance_status = TransactionStatusEnum.WAITING;
+        this.acceptance_status = PermissionStatusEnum.WAITING;
     }
 
     public void changeStatusAccept(){
-        this.acceptance_status = TransactionStatusEnum.ACCEPTANCE;
+        this.acceptance_status = PermissionStatusEnum.ACCEPTANCE;
     }
 
     public void changeStatusRefusal(){
-        this.acceptance_status = TransactionStatusEnum.REFUSAL;
+        this.acceptance_status = PermissionStatusEnum.REFUSAL;
     }
 
     public boolean checkAcceptanceStatusIsWaiting(){
-        return this.acceptance_status.equals(TransactionStatusEnum.WAITING);
+        return this.acceptance_status.equals(PermissionStatusEnum.WAITING);
     }
 
 

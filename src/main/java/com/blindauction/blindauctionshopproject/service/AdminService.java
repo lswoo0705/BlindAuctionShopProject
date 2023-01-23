@@ -136,7 +136,7 @@ public class AdminService {
         }
         //3. WAITING 인 경우 ACCEPT / REFUSAL 로 상태 변환
         //3-1 accept : sellerPermission 상태변환 + 유저를 셀러로 + permission 에서 가져온 폰번호로 유저 정보 변경
-        if (request.getAnswer().equals(TransactionStatusEnum.ACCEPTANCE)) {
+        if (request.getAnswer().equals(PermissionStatusEnum.ACCEPTANCE)) {
             sellerPermission.changeStatusAccept();
             User user = sellerPermission.getUser();
             String phoneNum = sellerPermission.getPhoneNum();
@@ -145,7 +145,7 @@ public class AdminService {
             return "판매자 전환요청 [수락] 처리 완료";
         }
         //3-2 Refusal : sellerPermission 상태 변환  ( 나중에 유저가 refusal 인 신청서 수정하는 기능 있음 좋겠다 )
-        else if (request.getAnswer().equals(TransactionStatusEnum.REFUSAL)) {
+        else if (request.getAnswer().equals(PermissionStatusEnum.REFUSAL)) {
             sellerPermission.changeStatusRefusal();
             return "판매자 전환요청 [거부] 처리 완료";
         } else throw new IllegalArgumentException("요청 처리는 ACCEPTANCE / REFUSAL 만 입력 가능합니다");
