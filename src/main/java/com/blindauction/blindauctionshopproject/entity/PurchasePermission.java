@@ -2,6 +2,8 @@ package com.blindauction.blindauctionshopproject.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -15,6 +17,7 @@ public class PurchasePermission {
 
     @JoinColumn(nullable = false)  // 연관관계 다시 확인
     @ManyToOne(cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product; //원본 판매글
 
     @JoinColumn(nullable = false)  // 연관관계 다시 확인

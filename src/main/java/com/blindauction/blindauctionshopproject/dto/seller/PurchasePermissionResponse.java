@@ -26,4 +26,5 @@ public class PurchasePermissionResponse {
         this.price = purchasePermission.getPrice();
         this.transactionStatusEnum = purchasePermission.getTransactionStatus();
     }
+
 }
