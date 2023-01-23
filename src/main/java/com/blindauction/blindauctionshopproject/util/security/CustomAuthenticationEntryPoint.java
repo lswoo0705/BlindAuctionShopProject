@@ -15,21 +15,21 @@ import java.io.OutputStream;
 
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    private static final StatusResponse statusResponseDto =
-            new StatusResponse(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+//    private static final StatusResponse statusResponseDto =
+//            new StatusResponse(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
 
     @Override
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-
-        try (OutputStream os = response.getOutputStream()) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(os, statusResponseDto);
-            os.flush();
-        }
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "권한이 없습니다");
+//        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//
+//        try (OutputStream os = response.getOutputStream()) {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            objectMapper.writeValue(os, statusResponseDto);
+//            os.flush();
+//        }
     }
 }

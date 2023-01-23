@@ -46,27 +46,41 @@ public class AdminController {
     }
 
     @GetMapping("/sellers") // 판매자목록 조회
-    public Page<SellerDetailResponse> getSellerList() {
-        return adminService.getSellerList();
+    public Page<SellerDetailResponse> getSellerList() { return adminService.getSellerList();
     }
 
-    @GetMapping("/seller-permissions") // 판매자권한 요청목록 조회
+    @GetMapping("/seller-permissions") // 판매자권한 요청목록 전체조회
     public Page<SellerPermissionResponse> getSellerPermissionList() {
         return adminService.getSellerPermissionList();
     }
 
-    @PutMapping("/role/{userId}") // 판매자 권한 승인 [확인ㅇ]
+    ////////////////////////////////////////////////////////////////////////// ▼ 대공사 존
+
+    //1. 특정 판매자 권한 요청을 조회
+    @GetMapping("seller-permissions/{sellerPermissionId}")
+    public SellerPermissionResponse getSellerPermissionDetail(@PathVariable Long sellerPermissionId){
+        return adminService.getSellerPermissionDetail(sellerPermissionId);
+    }
+
+    //2. 그 특정 판매자 권한 요청을 볼때 그걸 ACCEPT & REFUSAL 하는 기능
+    @PutMapping("seller-permissions/{sellerPermissionId}")
+    public ResponseEntity<StatusResponse> AnswerSellerPermission(@RequestBody AnswerSellerPermissionRequest request, @PathVariable Long sellerPermissionId){
+        String msg = adminService.AnswerSellerPermissionDetail(request, sellerPermissionId);
+        return ResponseEntity.ok().body(new StatusResponse(HttpStatus.OK.value(), msg));
+    }
+    //3. 그냥 ROLE/USERID 로 특정 유저 권한만 SELLER바꾸는거
+    @PutMapping("/role/{userId}") // USER을 SELLER로 권한 전환
     public ResponseEntity<StatusResponse> acceptSellerRole(@PathVariable Long userId) {
         adminService.acceptSellerRole(userId);
         return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "권한 승인"));
     }
-
-    @PutMapping("/role/delete/{userId}") // 판매자 권한 삭제
+    //4. 그냥 ROLE/USERID로 특정 유저 권한 강등
+    @PutMapping("/role/delete/{userId}") // SELLER를 USER로 권한 전환
     public ResponseEntity<StatusResponse> deleteSellerRole(@PathVariable Long userId) {
         adminService.deleteSellerRole(userId);
         return ResponseEntity.accepted().body(new StatusResponse(HttpStatus.ACCEPTED.value(), "권한 삭제"));
     }
-
+    //////////////////////////////////////////////////////////////////////////// ▲ 대공사 존
     //관리자 로그인
     @PostMapping("/login")
     public ResponseEntity<StatusResponse> loginAdmin(@RequestBody AdminLoginRequest adminLoginRequest, HttpServletResponse response){

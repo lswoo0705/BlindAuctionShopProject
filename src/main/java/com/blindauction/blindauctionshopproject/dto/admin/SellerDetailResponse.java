@@ -13,6 +13,8 @@ public class SellerDetailResponse {
 
     String sellerDetail;
 
+
+
     public SellerDetailResponse(String username, String nickname, String phoneNum, String sellerDetail) {
         this.username = username;
         this.nickname = nickname;

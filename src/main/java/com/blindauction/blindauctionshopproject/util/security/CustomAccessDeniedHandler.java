@@ -15,21 +15,22 @@ import java.io.OutputStream;
 
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
-    private static final SecurityExceptionDto exceptionDto =
-            new SecurityExceptionDto(HttpStatus.FORBIDDEN.value(), "접근이 거부되었습니다. 권한이 없습니다");
+//    private static final SecurityExceptionDto exceptionDto =
+//            new SecurityExceptionDto(HttpStatus.FORBIDDEN.value(), "접근이 거부되었습니다. 권한이 없습니다");
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException {
 
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpStatus.FORBIDDEN.value());
-
-        try (OutputStream os = response.getOutputStream()) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(os, exceptionDto);
-            os.flush();
-        }
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근이 거부되었습니다. 권한이 없습니다."); // 권한이 존재하지 않는경우 403
+//        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//        response.setStatus(HttpStatus.FORBIDDEN.value());
+//
+//        try (OutputStream os = response.getOutputStream()) {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            objectMapper.writeValue(os, exceptionDto);
+//            os.flush();
+//        }
 
     }
 }
