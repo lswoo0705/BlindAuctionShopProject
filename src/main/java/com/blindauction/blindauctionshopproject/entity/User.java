@@ -57,6 +57,15 @@ public class User {
         this.role = role;
     }
 
+    public User(String username, String nickname, String password, String phoneNum, String sellerDetail, UserRoleEnum role) {
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+        this.phoneNum = phoneNum;
+        this.sellerDetail = sellerDetail;
+        this.role = role;
+    }
+
     public boolean isSeller(){ //User 가 Seller 인지 확인해주는 메소드
         return this.getRole().equals(SELLER);
     }

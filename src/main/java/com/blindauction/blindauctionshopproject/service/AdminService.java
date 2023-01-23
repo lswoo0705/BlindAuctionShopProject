@@ -61,7 +61,7 @@ public class AdminService {
     @Transactional
     public Page<SellerDetailResponse> getSellerList() { // 판매자목록 조회
         return userRepository.findAllByRole(SELLER, PageRequest.of(0, 10))
-                .map(user -> new SellerDetailResponse(user.getUsername(), user.getNickname(), user.getNickname(), user.getSellerDetail()));
+                .map(user -> new SellerDetailResponse(user.getUsername(), user.getNickname(), user.getPhoneNum(), user.getSellerDetail()));
     }
 
     @Transactional

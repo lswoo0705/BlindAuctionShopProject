@@ -30,13 +30,17 @@ public class BlindauctionshopprojectApplication {
                                        UserService userService) {
         return (args -> {
             // 관리자, 판매자, 유저 생성
-            User admin = new User("admin", "관리자", passwordEncoder.encode("qweQWE123!@#"), UserRoleEnum.ADMIN);
-            User seller = new User("seller1", "판매자", passwordEncoder.encode("qweQWE123!@#"), UserRoleEnum.SELLER);
+            User admin = new User("admin", "관리자", passwordEncoder.encode("qweQWE123!@#"),UserRoleEnum.ADMIN);
+            User seller = new User("seller1", "판매자", passwordEncoder.encode("qweQWE123!@#"),"010-1234-1234", "멍멍샵 입니다", UserRoleEnum.SELLER);
+            User seller2 = new User("seller2", "판매자2", passwordEncoder.encode("qweQWE123!@#"),"010-0000-1234", "냥냥샵 입니다", UserRoleEnum.SELLER);
+            User seller3 = new User("seller3", "판매자3", passwordEncoder.encode("qweQWE123!@#"),"010-8888-1234", "샤넬샵 입니다", UserRoleEnum.SELLER);
             User user = new User("user1", "일반유저", passwordEncoder.encode("qweQWE123!@#"), UserRoleEnum.USER);
 
             // 생성한 유저들 레퍼지토리에 저장
             userRepository.save(admin);
             userRepository.save(seller);
+            userRepository.save(seller2);
+            userRepository.save(seller3);
             userRepository.save(user);
 
             // seller 가 작성한 판매글 생성 & 레퍼지토리 저장
