@@ -123,4 +123,7 @@ public class UserController {
     public SellerResponse getSellerById(@PathVariable Long userId) {
         return userService.getSellerById(userId);
     }
+
+    // 나의 전체 구매신청 조회
+
 }

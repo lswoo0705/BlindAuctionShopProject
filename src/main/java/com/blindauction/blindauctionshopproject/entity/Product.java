@@ -43,7 +43,7 @@ public class Product extends TimeStamped{
         this.bidderCnt += 1;
     }
 
-    public void update(User seller, String title, Long price, String productDetail) {
+    public void update(String title, Long price, String productDetail) {
         this.title = title;
         this.price = price;
         this.productDetail = productDetail;
