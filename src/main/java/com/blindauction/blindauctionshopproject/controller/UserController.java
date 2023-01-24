@@ -126,9 +126,9 @@ public class UserController {
 
     // 나의 전체 구매신청 상태 조회
     @GetMapping("/purchase-permission")
-    public Page<PurchaseStatusGetResponse> getPurchaseStatuse(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public Page<PurchaseStatusGetResponse> getPurchaseStatus(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                               @RequestParam int page) {
         String username = userDetails.getUsername();
-        return userService.getPurchaseStatuse(username, page - 1);
+        return userService.getPurchaseStatus(username, page - 1);
     }
 }

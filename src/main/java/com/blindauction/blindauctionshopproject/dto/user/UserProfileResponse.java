@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class UserProfileResponse {
-    private String username;
-    private String nickname;
+    private final String username;
+    private final String nickname;
 
     public UserProfileResponse(String username, String nickname) {
         this.username = username;

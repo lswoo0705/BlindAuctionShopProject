@@ -6,9 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class PurchaseStatusGetResponse {
-    private Long productId;
-    private String title;
-    private PermissionStatusEnum permissionStatusEnum;
+    private final Long productId;
+    private final String title;
+    private final PermissionStatusEnum permissionStatusEnum;
 
     public PurchaseStatusGetResponse(PurchasePermission purchasePermission) {
         this.productId = purchasePermission.getProduct().getId();

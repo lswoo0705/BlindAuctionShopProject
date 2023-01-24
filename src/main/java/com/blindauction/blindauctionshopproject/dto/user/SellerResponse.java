@@ -4,11 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class SellerResponse {
-
     String username;
-
     String nickname;
-
     String sellerDetail;
 
     public SellerResponse(String username, String nickname, String sellerDetail) {

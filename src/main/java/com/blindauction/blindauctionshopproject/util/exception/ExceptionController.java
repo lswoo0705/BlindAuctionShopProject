@@ -20,14 +20,12 @@ import javax.servlet.ServletException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ExceptionController {
-    private final ExceptionService exceptionService;
     @ExceptionHandler(IllegalArgumentException.class)
     private ResponseEntity<StatusResponse> illegalArgumentExceptionhandler(IllegalArgumentException e){
         StatusResponse statusResponse = new StatusResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());

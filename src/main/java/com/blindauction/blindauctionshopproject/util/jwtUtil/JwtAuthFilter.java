@@ -5,7 +5,6 @@ import com.blindauction.blindauctionshopproject.repository.LogoutTokenRepository
 import com.blindauction.blindauctionshopproject.util.security.UserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Enumerated;
 import java.util.Optional;
 
 import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.SELLER;
@@ -26,7 +25,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final LogoutTokenRepository logoutTokenRepository;
-    private final ProductRepository productRepository;
     private final PurchasePermissionRepository purchasePermissionRepository;
 
     // 나의 프로필 조회
@@ -133,7 +131,7 @@ public class UserService {
 
     // 나의 전체 구매신청 상태 조회
     @Transactional
-    public Page<PurchaseStatusGetResponse> getPurchaseStatuse(String username, int page) {
+    public Page<PurchaseStatusGetResponse> getPurchaseStatus(String username, int page) {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "id"));
 
         User user = userRepository.findByUsername(username).orElseThrow(

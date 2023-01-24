@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class UserProfileUpdateRequest {
-    private String nickname;
-    private String password;
+    private final String nickname;
+    private final String password;
 
     public UserProfileUpdateRequest(String nickname, String password) {
         this.nickname = nickname;

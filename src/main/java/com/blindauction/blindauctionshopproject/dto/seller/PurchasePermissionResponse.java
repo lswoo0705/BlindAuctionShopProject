@@ -9,7 +9,6 @@ public class PurchasePermissionResponse {
     private final String username;
     private final String bidder;
     private final String msg;
-
     private final Long price;
     private final PermissionStatusEnum permissionStatusEnum;
 
