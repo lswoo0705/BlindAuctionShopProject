@@ -97,7 +97,7 @@ public class SellerController {
         return sellerService.getPurchasePermissionList(username, page -1);
     }
 
-    // 고객(거래)요청 수락&완료
+    // 고객(거래)요청 수락&거부
     @PutMapping("/sellers/purchase-permission/{permissionId}")
     public ResponseEntity<StatusResponse> updatePurchasePermission(@PathVariable Long permissionId, @RequestBody PurchasePermissionUpdateRequest purchasePermissionUpdateRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StatusResponse statusResponse = new StatusResponse(HttpStatus.OK.value(), "구매 요청 처리 완료");
