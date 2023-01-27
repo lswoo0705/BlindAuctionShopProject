@@ -1,5 +1,6 @@
 package com.blindauction.blindauctionshopproject.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity(name="PRODUCT")
 public class Product extends TimeStamped{
     @Id

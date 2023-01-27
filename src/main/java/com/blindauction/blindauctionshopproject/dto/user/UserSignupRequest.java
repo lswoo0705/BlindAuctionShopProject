@@ -1,5 +1,7 @@
 package com.blindauction.blindauctionshopproject.dto.user;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.Pattern;
@@ -8,6 +10,8 @@ import javax.validation.constraints.Size;
 
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class UserSignupRequest {
 
     @Pattern(regexp = "^[0-9a-z]*$", message = "아이디 형식에 맞지 않습니다. 아이디는 4 ~ 10자리 영문(소문자), 숫자로 이루어져야 합니다.")

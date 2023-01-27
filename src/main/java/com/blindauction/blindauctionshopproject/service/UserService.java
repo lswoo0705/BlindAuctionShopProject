@@ -39,7 +39,7 @@ public class UserService {
     }
 
     // 나의 프로필 설정(수정)
-    @Transactional
+    @Transactional // request는 서비스단에서 풀기
     public void updateUserProfile(String nickname, String password, String userInfo) {
         User user = userRepository.findByUsername(userInfo).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다.")

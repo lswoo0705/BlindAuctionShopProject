@@ -1,5 +1,7 @@
 package com.blindauction.blindauctionshopproject.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +12,8 @@ import static com.blindauction.blindauctionshopproject.entity.UserRoleEnum.USER;
 
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Entity(name="USERS")
 public class User {
 

@@ -1,8 +1,10 @@
 package com.blindauction.blindauctionshopproject.dto.seller;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class ProductRegisterRequest {
     private final String title;
     private final Long price;
