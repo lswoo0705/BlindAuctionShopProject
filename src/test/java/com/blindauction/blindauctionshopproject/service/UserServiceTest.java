@@ -143,11 +143,18 @@ class UserServiceTest {
         when(mockUser.getUsername()).thenReturn("asdasd");
 
         when(userRepository.findByUsername(any(String.class))).thenReturn(Optional.of(mockUser));
-//        when(mockUser.getUsername().equals("asdasd")).thenReturn(true);
+        doReturn(true).when(mockUser.getUsername().equals("asdasd"));
         when(passwordEncoder.matches(any(String.class),any(String.class))).thenReturn(true);
 
-        userService.updateUserProfile(any(String.class),any(String.class),(userInfo));
+        userService.updateUserProfile(any(String.class),any(String.class),"asdasd");
 
         verify(mockUser).updateUserProfile(any(String.class));
     }
 }
+
+// 1. when 인자는 목이 아니라 실제 인자가 들어가줘야한다.
+// 2. 패스워드에 대한 리턴 값
+// 3. passwordEncoder -> any(CharSequence.class)
+
+// Mock 실제 코드가 동작을 하는 것이 아니라 가짜
+// Spy 실제로 동작이 되는 것
